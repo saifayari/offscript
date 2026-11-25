@@ -1,0 +1,3012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>INTRO TO AI — Understand. Explore. Apply. | Seif Ayari</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-white: #FFFFFF;
+      --bg-ice: #F5F9FF;
+      --bg-ice-2: #ECF3FF;
+      --primary: #1769FF;
+      --primary-soft: rgba(23, 105, 255, 0.10);
+      --cyan: #20C5E8;
+      --cyan-soft: rgba(32, 197, 232, 0.12);
+      --violet: #8067FF;
+      --violet-soft: rgba(128, 103, 255, 0.11);
+      --navy: #15233B;
+      --slate: #4B5E7D;
+      --muted: #7C8FA9;
+      --border: rgba(23, 105, 255, 0.13);
+      --shadow-card: 0 14px 36px -8px rgba(21, 35, 59, 0.08), 0 4px 12px rgba(23, 105, 255, 0.05);
+      --shadow-soft: 0 8px 24px -6px rgba(21, 35, 59, 0.06);
+      --shadow-glow: 0 18px 46px -10px rgba(23, 105, 255, 0.20);
+      --font-head: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --font-body: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #E9F1FE;
+      color: var(--navy);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+
+    /* Viewport theater wrapper */
+    #viewport {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: radial-gradient(circle at 20% 20%, #F5F9FF 0%, #E2ECFC 100%);
+    }
+
+    /* Fixed 16:9 presentation stage (1600 x 900) */
+    #stage {
+      width: 1600px;
+      height: 900px;
+      position: relative;
+      transform-origin: center center;
+      border-radius: 20px;
+      overflow: hidden;
+      background: linear-gradient(145deg, #FFFFFF 0%, #F5F9FF 55%, #EFF6FF 100%);
+      box-shadow: 0 28px 80px -16px rgba(21, 35, 59, 0.22), 0 0 0 1px rgba(23, 105, 255, 0.12);
+    }
+
+    /* Ambient light-mode tech backdrop */
+    .stage-bg-decor {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .stage-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 1px 1px, rgba(23, 105, 255, 0.085) 1.2px, transparent 0);
+      background-size: 36px 36px;
+      opacity: 0.7;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.55;
+    }
+    .orb-1 { width: 520px; height: 520px; top: -180px; right: -120px; background: rgba(32, 197, 232, 0.18); }
+    .orb-2 { width: 480px; height: 480px; bottom: -200px; left: -120px; background: rgba(128, 103, 255, 0.14); }
+    .orb-3 { width: 420px; height: 420px; top: 35%; left: 42%; background: rgba(23, 105, 255, 0.07); }
+
+    /* Individual slide */
+    .slide {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: none;
+      flex-direction: column;
+      padding: 40px 68px 46px;
+      opacity: 0;
+    }
+    .slide.active {
+      display: flex;
+      animation: slideEnter 0.48s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes slideEnter {
+      from { opacity: 0; transform: translateY(14px) scale(0.992); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Staggered child animations */
+    .slide.active .anim-1 { animation: fadeUp 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.06s both; }
+    .slide.active .anim-2 { animation: fadeUp 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both; }
+    .slide.active .anim-3 { animation: fadeUp 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both; }
+    .slide.active .anim-4 { animation: fadeUp 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.30s both; }
+    .slide.active .anim-5 { animation: fadeUp 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.38s both; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50%      { transform: translateY(-9px); }
+    }
+    @keyframes dashMove {
+      to { stroke-dashoffset: -36; }
+    }
+    @keyframes pulseSoft {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50%      { transform: scale(1.06); opacity: 1; }
+    }
+
+    .float-slow { animation: floatSlow 6s ease-in-out infinite; }
+    .dash-flow { stroke-dasharray: 8 8; animation: dashMove 1.4s linear infinite; }
+
+    /* Top bar inside every slide (except Slide 1 cover) */
+    .slide-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      flex-shrink: 0;
+    }
+    .chapter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(23, 105, 255, 0.18);
+      box-shadow: 0 4px 12px rgba(23, 105, 255, 0.06);
+      font-family: var(--font-head);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+    .chapter-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--cyan));
+    }
+    .slide-meta-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .slide-badge-num {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(21, 35, 59, 0.09);
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    /* Typography */
+    h1.slide-title {
+      font-family: var(--font-head);
+      font-size: 46px;
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--cyan) 55%, var(--violet) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .def-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 22px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(23, 105, 255, 0.16);
+      border-left: 5px solid var(--primary);
+      box-shadow: var(--shadow-soft);
+      font-size: 20px;
+      line-height: 1.42;
+      font-weight: 500;
+      color: var(--navy);
+      max-width: 1220px;
+    }
+
+    /* Common Card Styles */
+    .card {
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+    .card-soft {
+      background: linear-gradient(160deg, rgba(255,255,255,0.96) 0%, rgba(245,249,255,0.92) 100%);
+      border: 1px solid rgba(23, 105, 255, 0.14);
+      border-radius: 22px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    /* Tag pills */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .tag-blue { background: var(--primary-soft); color: var(--primary); }
+    .tag-cyan { background: var(--cyan-soft); color: #0891B2; }
+    .tag-violet { background: var(--violet-soft); color: #6346FA; }
+    .tag-navy { background: rgba(21, 35, 59, 0.07); color: var(--navy); }
+    .tag-emerald { background: rgba(16, 185, 129, 0.12); color: #059669; }
+    .tag-rose { background: rgba(244, 63, 94, 0.11); color: #E11D48; }
+
+    /* Interactive buttons on slides */
+    .btn-interactive {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(23, 105, 255, 0.25);
+      background: linear-gradient(135deg, #1769FF 0%, #20C5E8 100%);
+      color: #FFFFFF;
+      font-family: var(--font-head);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 20px -4px rgba(23, 105, 255, 0.35);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .btn-interactive:hover { transform: translateY(-2px); box-shadow: 0 12px 26px -4px rgba(23, 105, 255, 0.42); }
+    .btn-interactive:active { transform: translateY(0); }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 15px;
+      border-radius: 10px;
+      border: 1px solid rgba(23, 105, 255, 0.2);
+      background: #FFFFFF;
+      color: var(--navy);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+    .btn-ghost:hover, .btn-ghost.active-pill {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    /* Floating Presenter Control Bar (outside slide canvas bottom) */
+    #hud {
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 90;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.90);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(23, 105, 255, 0.18);
+      box-shadow: 0 12px 32px rgba(21, 35, 59, 0.14);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    body.hide-hud #hud { opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(16px); }
+    .hud-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: var(--navy);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .hud-btn:hover { background: var(--primary-soft); color: var(--primary); }
+    .hud-btn.primary { background: var(--primary); color: #fff; }
+    .hud-btn.primary:hover { background: #1055D6; color: #fff; }
+    .hud-sep { width: 1px; height: 20px; background: rgba(21, 35, 59, 0.12); margin: 0 2px; }
+    #hud-counter {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy);
+      min-width: 58px;
+      text-align: center;
+    }
+    #hud-progress-wrap {
+      width: 110px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(23, 105, 255, 0.12);
+      overflow: hidden;
+    }
+    #hud-progress-bar {
+      height: 100%;
+      width: 5%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--primary), var(--cyan), var(--violet));
+      transition: width 0.3s ease;
+    }
+    #workshop-timer-pill {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-soft);
+      padding: 5px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Speaker Notes Drawer */
+    #notes-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 400px;
+      height: 100vh;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(18px);
+      border-left: 1px solid rgba(23, 105, 255, 0.16);
+      box-shadow: -16px 0 48px rgba(21, 35, 59, 0.14);
+      transform: translateX(100%);
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 26px;
+    }
+    #notes-drawer.open { transform: translateX(0); }
+
+    /* Slide Overview Modal */
+    #overview-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 110;
+      background: rgba(21, 35, 59, 0.52);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 36px;
+    }
+    #overview-modal.open { display: flex; }
+    .overview-panel {
+      width: min(1240px, 95vw);
+      max-height: 88vh;
+      background: #FFFFFF;
+      border-radius: 24px;
+      padding: 28px 32px;
+      overflow-y: auto;
+      box-shadow: 0 30px 90px rgba(21, 35, 59, 0.32);
+    }
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .ov-card {
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(23, 105, 255, 0.14);
+      background: #F5F9FF;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      text-align: left;
+    }
+    .ov-card:hover { border-color: var(--primary); background: #FFFFFF; transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+    .ov-card.current { border: 2px solid var(--primary); background: #FFFFFF; box-shadow: 0 8px 20px rgba(23, 105, 255, 0.15); }
+
+    /* Toast feedback */
+    #toast {
+      position: fixed;
+      top: 22px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-16px);
+      background: var(--navy);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 120;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 12px 28px rgba(21, 35, 59, 0.25);
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Print / PDF Export Mode */
+    @media print {
+      @page { size: 1600px 900px; margin: 0; }
+      html, body {
+        width: 1600px !important;
+        height: auto !important;
+        overflow: visible !important;
+        background: #FFFFFF !important;
+      }
+      #viewport {
+        display: block !important;
+        width: 1600px !important;
+        height: auto !important;
+        background: none !important;
+      }
+      #stage {
+        width: 1600px !important;
+        height: auto !important;
+        transform: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        overflow: visible !important;
+        background: transparent !important;
+      }
+      .stage-bg-decor { display: none !important; }
+      .slide {
+        position: relative !important;
+        display: flex !important;
+        width: 1600px !important;
+        height: 900px !important;
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        background: linear-gradient(145deg, #FFFFFF 0%, #F5F9FF 55%, #EFF6FF 100%) !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .slide * { animation: none !important; opacity: 1 !important; }
+      #hud, #notes-drawer, #overview-modal, #toast { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="viewport">
+  <div id="stage">
+    <!-- Subtle Light-Mode Ambient Backdrop -->
+    <div class="stage-bg-decor">
+      <div class="stage-grid"></div>
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+
+    <!-- =========================================================
+         SLIDE 1: COVER
+    ========================================================== -->
+    <section class="slide active" id="slide-1" data-chapter="Cover" data-title="INTRO TO AI">
+      <div style="display:grid; grid-template-columns: 1.18fr 0.82fr; gap: 48px; align-items: center; height: 100%;">
+        <!-- Left Hero Copy -->
+        <div style="display:flex; flex-direction:column; gap: 26px;">
+          <div class="anim-1" style="display:flex; align-items:center; gap: 12px;">
+            <span class="tag tag-blue" style="font-size:14px; padding:8px 18px; border:1px solid rgba(23,105,255,0.22);">
+              <span style="width:8px;height:8px;border-radius:50%;background:#1769FF;display:inline-block;"></span>
+              2-HOUR INTERACTIVE WORKSHOP
+            </span>
+            <span class="tag tag-cyan" style="font-size:13px; padding:8px 16px;">CHAPTERS 1 – 6 · 21 SLIDES</span>
+          </div>
+
+          <div class="anim-2">
+            <h1 style="font-family:var(--font-head); font-size:94px; font-weight:800; line-height:0.98; letter-spacing:-0.03em; color:var(--navy);">
+              INTRO TO <span class="gradient-text">AI</span>
+            </h1>
+            <p style="font-family:var(--font-head); font-size:34px; font-weight:700; margin-top:14px; letter-spacing:-0.01em; color:#2B4268;">
+              Understand. <span style="color:var(--primary);">Explore.</span> <span style="color:var(--violet);">Apply.</span>
+            </p>
+          </div>
+
+          <div class="anim-3" style="display:flex; flex-wrap:wrap; gap:10px; margin-top:4px;">
+            <span style="padding:10px 18px; border-radius:12px; background:#fff; border:1px solid rgba(23,105,255,0.16); box-shadow:var(--shadow-soft); font-size:15px; font-weight:600; color:var(--navy);">AI Fundamentals</span>
+            <span style="padding:10px 18px; border-radius:12px; background:#fff; border:1px solid rgba(32,197,232,0.25); box-shadow:var(--shadow-soft); font-size:15px; font-weight:600; color:var(--navy);">Machine Learning</span>
+            <span style="padding:10px 18px; border-radius:12px; background:#fff; border:1px solid rgba(128,103,255,0.22); box-shadow:var(--shadow-soft); font-size:15px; font-weight:600; color:var(--navy);">Generative AI</span>
+            <span style="padding:10px 18px; border-radius:12px; background:#fff; border:1px solid rgba(23,105,255,0.16); box-shadow:var(--shadow-soft); font-size:15px; font-weight:600; color:var(--navy);">Prompt Engineering</span>
+          </div>
+
+          <div class="anim-4" style="margin-top:14px; display:inline-flex; align-items:center; gap:16px; padding:14px 24px; border-radius:18px; background:rgba(255,255,255,0.92); border:1px solid rgba(23,105,255,0.15); box-shadow:var(--shadow-card); width:fit-content;">
+            <div style="width:46px; height:46px; border-radius:14px; background:linear-gradient(135deg,#1769FF,#20C5E8); display:flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-head); font-weight:800; font-size:18px;">SA</div>
+            <div>
+              <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted);">Presented by</div>
+              <div style="font-family:var(--font-head); font-size:21px; font-weight:700; color:var(--navy);">Seif Ayari</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Hero Futuristic AI Visual -->
+        <div class="anim-3" style="position:relative; display:flex; align-items:center; justify-content:center;">
+          <div style="position:absolute; width:560px; height:560px; border-radius:50%; border:1.5px dashed rgba(23,105,255,0.22);"></div>
+          <div style="position:absolute; width:610px; height:610px; border-radius:50%; background:radial-gradient(circle, rgba(32,197,232,0.16) 0%, rgba(128,103,255,0.06) 55%, transparent 72%);"></div>
+          <div class="float-slow" style="width:530px; height:530px; border-radius:36px; overflow:hidden; background:#FFFFFF; border:1px solid rgba(23,105,255,0.16); box-shadow: 0 30px 70px -15px rgba(23,105,255,0.22); position:relative;">
+            <img src="assets/hero_cover_ai.jpg" alt="Futuristic AI Neural Sculpture" style="width:100%; height:100%; object-fit:cover;">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 2: AI IN EVERYDAY LIFE
+    ========================================================== -->
+    <section class="slide" id="slide-2" data-chapter="Chapter 1 · Discovering AI" data-title="How Many Times Did You Use AI Today?">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 1 · Discovering AI</div>
+        <div class="slide-meta-right">
+          <span class="tag tag-cyan">Quick Poll · Raise Your Hand!</span>
+          <span class="slide-badge-num">02 / 21</span>
+        </div>
+      </div>
+
+      <h1 class="slide-title anim-1">HOW MANY TIMES DID YOU <span class="gradient-text">USE AI TODAY?</span></h1>
+
+      <div class="slide-body">
+        <!-- 5-Card Visual Collage -->
+        <div style="display:grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: 1fr 1fr; gap: 22px; height: 640px;">
+
+          <!-- 1. Smartphone Face Recognition (Left Tall) -->
+          <div class="card anim-2" style="grid-column: span 2; grid-row: span 2; padding: 26px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(170deg, #FFFFFF 0%, #EEF5FF 100%);">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="tag tag-blue">Computer Vision</span>
+              <span style="font-size:13px; font-weight:700; color:#059669;">● Unlocked</span>
+            </div>
+            <!-- Sleek Phone Face ID Visual -->
+            <div style="display:flex; justify-content:center; align-items:center; flex:1; padding:12px 0;">
+              <div style="width:215px; height:365px; border-radius:36px; background:#15233B; padding:12px; box-shadow: 0 24px 48px -12px rgba(21,35,59,0.28); position:relative;">
+                <div style="width:100%; height:100%; border-radius:26px; background:linear-gradient(180deg, #0F1E36 0%, #163059 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; overflow:hidden;">
+                  <div style="width:76px; height:16px; border-radius:99px; background:#09111E; position:absolute; top:12px;"></div>
+                  <!-- Face mesh SVG -->
+                  <svg width="136" height="152" viewBox="0 0 140 160" fill="none">
+                    <path d="M24 38V24H38M102 24H116V38M24 122V136H38M102 136H116V122" stroke="#20C5E8" stroke-width="3.5" stroke-linecap="round"/>
+                    <ellipse cx="70" cy="78" rx="34" ry="44" stroke="#1769FF" stroke-width="2" stroke-dasharray="4 4"/>
+                    <path d="M46 76 C52 66, 62 66, 65 76 M75 76 C78 66, 88 66, 94 76" stroke="#20C5E8" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M70 72 V92 H64" stroke="#8067FF" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M54 103 C62 111, 78 111, 86 103" stroke="#20C5E8" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="55" cy="74" r="3" fill="#20C5E8"/>
+                    <circle cx="85" cy="74" r="3" fill="#20C5E8"/>
+                    <circle cx="70" cy="54" r="2.5" fill="#8067FF"/>
+                    <circle cx="70" cy="96" r="2.5" fill="#1769FF"/>
+                    <line x1="28" y1="80" x2="112" y2="80" stroke="#20C5E8" stroke-width="1.5" opacity="0.5"/>
+                  </svg>
+                  <div style="margin-top:14px; padding:6px 14px; border-radius:999px; background:rgba(32,197,232,0.18); border:1px solid rgba(32,197,232,0.45); color:#7DF2FF; font-size:12px; font-weight:700;">Face ID Verified · 0.2s</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="font-family:var(--font-head); font-size:23px; font-weight:700; color:var(--navy);">Smartphone Face Recognition</div>
+              <div style="font-size:15px; color:var(--slate); margin-top:4px;">3D facial landmarks recognize you instantly.</div>
+            </div>
+          </div>
+
+          <!-- 2. Google Maps Navigation -->
+          <div class="card anim-2" style="grid-column: span 2; padding: 22px 24px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div style="font-family:var(--font-head); font-size:21px; font-weight:700;">Google Maps Navigation</div>
+              <span class="tag tag-cyan">14 min · Fastest</span>
+            </div>
+            <!-- Stylized Map SVG -->
+            <div style="flex:1; margin:12px 0; border-radius:16px; background:#F0F6FF; border:1px solid rgba(23,105,255,0.12); overflow:hidden; position:relative;">
+              <svg width="100%" height="100%" viewBox="0 0 420 170" preserveAspectRatio="xMidYMid slice">
+                <rect width="420" height="170" fill="#EDF4FF"/>
+                <path d="M0 40 H420 M0 95 H420 M0 140 H420 M70 0 V170 M180 0 V170 M300 0 V170" stroke="#FFFFFF" stroke-width="8"/>
+                <path d="M40 135 Q120 120 180 95 T310 50 T380 35" stroke="#CBD5E1" stroke-width="9" fill="none" stroke-linecap="round"/>
+                <path d="M40 135 Q120 120 180 95 T310 50 T380 35" stroke="#1769FF" stroke-width="6" fill="none" stroke-linecap="round"/>
+                <path d="M40 135 Q120 120 180 95" stroke="#20C5E8" stroke-width="6" fill="none" stroke-linecap="round"/>
+                <circle cx="40" cy="135" r="8" fill="#1769FF" stroke="#fff" stroke-width="3"/>
+                <circle cx="380" cy="35" r="10" fill="#8067FF" stroke="#fff" stroke-width="3"/>
+                <rect x="200" y="64" width="110" height="26" rx="8" fill="#15233B"/>
+                <text x="255" y="81" fill="#fff" font-size="11" font-weight="700" text-anchor="middle" font-family="Inter, sans-serif">AI Traffic ETA</text>
+              </svg>
+            </div>
+            <div style="font-size:14px; color:var(--slate);">Predicts congestion &amp; live optimal routes.</div>
+          </div>
+
+          <!-- 3. Netflix Recommendations -->
+          <div class="card anim-3" style="grid-column: span 2; padding: 22px 24px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div style="font-family:var(--font-head); font-size:21px; font-weight:700;">Netflix Recommendations</div>
+              <span class="tag tag-violet">98% Match</span>
+            </div>
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin:12px 0; flex:1;">
+              <div style="border-radius:14px; background:linear-gradient(155deg,#15233B,#1769FF); padding:12px; color:#fff; display:flex; flex-direction:column; justify-content:space-between;">
+                <span style="font-size:11px; font-weight:700; color:#7DF2FF;">98% MATCH</span>
+                <div>
+                  <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:8px;">▶</div>
+                  <div style="font-size:13px;font-weight:700;">Sci-Fi Thriller</div>
+                </div>
+              </div>
+              <div style="border-radius:14px; background:linear-gradient(155deg,#253658,#8067FF); padding:12px; color:#fff; display:flex; flex-direction:column; justify-content:space-between;">
+                <span style="font-size:11px; font-weight:700; color:#E2DCFF;">94% MATCH</span>
+                <div>
+                  <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:8px;">▶</div>
+                  <div style="font-size:13px;font-weight:700;">Tech Docuseries</div>
+                </div>
+              </div>
+              <div style="border-radius:14px; background:linear-gradient(155deg,#0E3A5D,#20C5E8); padding:12px; color:#fff; display:flex; flex-direction:column; justify-content:space-between;">
+                <span style="font-size:11px; font-weight:700; color:#fff;">91% MATCH</span>
+                <div>
+                  <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:8px;">▶</div>
+                  <div style="font-size:13px;font-weight:700;">Mystery Drama</div>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:14px; color:var(--slate);">Learns your taste from viewing patterns.</div>
+          </div>
+
+          <!-- 4. ChatGPT -->
+          <div class="card anim-3" style="grid-column: span 2; padding: 22px 24px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div style="font-family:var(--font-head); font-size:21px; font-weight:700;">ChatGPT</div>
+              <span class="tag tag-emerald">Conversational AI</span>
+            </div>
+            <div style="flex:1; margin:12px 0; padding:14px; border-radius:16px; background:#F5F9FF; border:1px solid rgba(23,105,255,0.12); display:flex; flex-direction:column; justify-content:center; gap:10px;">
+              <div style="align-self:flex-end; background:#1769FF; color:#fff; padding:8px 14px; border-radius:14px 14px 4px 14px; font-size:13px; font-weight:500;">Summarize this article in 3 bullets</div>
+              <div style="align-self:flex-start; background:#FFFFFF; border:1px solid rgba(21,35,59,0.1); padding:10px 14px; border-radius:14px 14px 14px 4px; font-size:13px; color:var(--navy); display:flex; align-items:center; gap:10px;">
+                <span style="width:24px;height:24px;border-radius:8px;background:linear-gradient(135deg,#10B981,#20C5E8);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;">✦</span>
+                <span>Drafting clear key takeaways for you…</span>
+              </div>
+            </div>
+            <div style="font-size:14px; color:var(--slate);">Generates answers, summaries &amp; ideas in seconds.</div>
+          </div>
+
+          <!-- 5. Shopping Recommendations -->
+          <div class="card anim-4" style="grid-column: span 2; padding: 22px 24px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div style="font-family:var(--font-head); font-size:19px; font-weight:700; letter-spacing:-0.015em;">Shopping Recommendations</div>
+              <span class="tag tag-blue">Picked For You</span>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin:12px 0; flex:1;">
+              <div style="border-radius:14px; background:#F5F9FF; border:1px solid rgba(23,105,255,0.12); padding:12px; display:flex; flex-direction:column; justify-content:space-between;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <rect width="40" height="40" rx="10" fill="#E0ECFF"/>
+                    <path d="M12 24 C12 17, 28 17, 28 24" stroke="#1769FF" stroke-width="2.5" stroke-linecap="round"/>
+                    <rect x="10" y="22" width="4" height="7" rx="2" fill="#1769FF"/>
+                    <rect x="26" y="22" width="4" height="7" rx="2" fill="#1769FF"/>
+                  </svg>
+                  <span style="font-size:11px;font-weight:700;color:#1769FF;">★ 4.9</span>
+                </div>
+                <div>
+                  <div style="font-size:13px; font-weight:700;">Smart Headphones</div>
+                  <div style="font-size:11px; color:var(--muted);">Frequently bought together</div>
+                </div>
+              </div>
+              <div style="border-radius:14px; background:#F5F9FF; border:1px solid rgba(128,103,255,0.15); padding:12px; display:flex; flex-direction:column; justify-content:space-between;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <rect width="40" height="40" rx="10" fill="#EDE9FE"/>
+                    <rect x="14" y="10" width="12" height="20" rx="3" stroke="#8067FF" stroke-width="2.2"/>
+                    <circle cx="20" cy="20" r="3" fill="#8067FF"/>
+                  </svg>
+                  <span style="font-size:11px;font-weight:700;color:#8067FF;">TOP PICK</span>
+                </div>
+                <div>
+                  <div style="font-size:13px; font-weight:700;">Fitness Watch</div>
+                  <div style="font-size:11px; color:var(--muted);">Matched to your browsing</div>
+                </div>
+              </div>
+            </div>
+            <div style="font-size:14px; color:var(--slate);">Matches products to your preferences &amp; habits.</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 3: WHAT IS ARTIFICIAL INTELLIGENCE?
+    ========================================================== -->
+    <section class="slide" id="slide-3" data-chapter="Chapter 1 · Discovering AI" data-title="What Is Artificial Intelligence?">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 1 · Discovering AI</div>
+        <div class="slide-meta-right"><span class="slide-badge-num">03 / 21</span></div>
+      </div>
+
+      <h1 class="slide-title anim-1">WHAT IS <span class="gradient-text">ARTIFICIAL INTELLIGENCE?</span></h1>
+
+      <div class="def-banner anim-2" style="margin-bottom: 24px;">
+        <div style="width:40px; height:40px; border-radius:12px; background:var(--primary-soft); color:var(--primary); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:800; font-size:20px;">AI</div>
+        <div>AI is the field of computer science focused on creating systems capable of performing tasks associated with <strong>human intelligence</strong>.</div>
+      </div>
+
+      <div class="slide-body">
+        <!-- Hub-and-Spoke Visual of 6 Capabilities -->
+        <div class="anim-3" style="position:relative; height:530px; display:grid; grid-template-columns: 1fr 310px 1fr; gap: 28px; align-items:center;">
+
+          <!-- Left 3 Capabilities -->
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <div class="card" style="padding:20px 24px; display:flex; align-items:center; gap:18px;">
+              <div style="width:58px; height:58px; border-radius:16px; background:linear-gradient(135deg,#1769FF,#20C5E8); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+              </div>
+              <div>
+                <div style="font-family:var(--font-head); font-size:22px; font-weight:700;">1. Learning</div>
+                <div style="font-size:15px; color:var(--slate);">Improving automatically from experience &amp; data</div>
+              </div>
+            </div>
+
+            <div class="card" style="padding:20px 24px; display:flex; align-items:center; gap:18px;">
+              <div style="width:58px; height:58px; border-radius:16px; background:linear-gradient(135deg,#20C5E8,#1769FF); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              </div>
+              <div>
+                <div style="font-family:var(--font-head); font-size:22px; font-weight:700;">2. Recognition</div>
+                <div style="font-size:15px; color:var(--slate);">Identifying images, voices, objects &amp; patterns</div>
+              </div>
+            </div>
+
+            <div class="card" style="padding:20px 24px; display:flex; align-items:center; gap:18px;">
+              <div style="width:58px; height:58px; border-radius:16px; background:linear-gradient(135deg,#1769FF,#8067FF); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>
+              </div>
+              <div>
+                <div style="font-family:var(--font-head); font-size:22px; font-weight:700;">3. Prediction</div>
+                <div style="font-size:15px; color:var(--slate);">Forecasting outcomes &amp; future trends</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center Radiant AI Core -->
+          <div style="display:flex; align-items:center; justify-content:center; position:relative; height:100%;">
+            <svg width="310" height="440" viewBox="0 0 310 440" style="position:absolute; inset:0; margin:auto; pointer-events:none;">
+              <path d="M0 75 C70 75, 85 220, 155 220" stroke="url(#gradLine)" stroke-width="2.5" fill="none" class="dash-flow"/>
+              <path d="M0 220 H155" stroke="url(#gradLine)" stroke-width="2.5" fill="none" class="dash-flow"/>
+              <path d="M0 365 C70 365, 85 220, 155 220" stroke="url(#gradLine)" stroke-width="2.5" fill="none" class="dash-flow"/>
+              <path d="M310 75 C240 75, 225 220, 155 220" stroke="url(#gradLine)" stroke-width="2.5" fill="none" class="dash-flow"/>
+              <path d="M310 220 H155" stroke="url(#gradLine)" stroke-width="2.5" fill="none" class="dash-flow"/>
+              <path d="M310 365 C240 365, 225 220, 155 220" stroke="url(#gradLine)" stroke-width="2.5" fill="none" class="dash-flow"/>
+              <defs>
+                <linearGradient id="gradLine" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#1769FF"/>
+                  <stop offset="50%" stop-color="#20C5E8"/>
+                  <stop offset="100%" stop-color="#8067FF"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div style="width:196px; height:196px; border-radius:50%; background:linear-gradient(145deg,#FFFFFF,#EEF5FF); border:2px solid rgba(23,105,255,0.22); box-shadow: 0 0 0 16px rgba(23,105,255,0.05), 0 24px 50px rgba(23,105,255,0.18); display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2; text-align:center;">
+              <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                <circle cx="32" cy="32" r="24" stroke="url(#gradLine)" stroke-width="2.5"/>
+                <circle cx="32" cy="18" r="4" fill="#1769FF"/>
+                <circle cx="20" cy="38" r="4" fill="#20C5E8"/>
+                <circle cx="44" cy="38" r="4" fill="#8067FF"/>
+                <line x1="32" y1="18" x2="20" y2="38" stroke="#1769FF" stroke-width="2"/>
+                <line x1="32" y1="18" x2="44" y2="38" stroke="#8067FF" stroke-width="2"/>
+                <line x1="20" y1="38" x2="44" y2="38" stroke="#20C5E8" stroke-width="2"/>
+              </svg>
+              <div style="font-family:var(--font-head); font-size:17px; font-weight:800; color:var(--navy); margin-top:6px;">6 Core<br>Capabilities</div>
+            </div>
+          </div>
+
+          <!-- Right 3 Capabilities -->
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <div class="card" style="padding:20px 24px; display:flex; align-items:center; gap:18px;">
+              <div style="width:58px; height:58px; border-radius:16px; background:linear-gradient(135deg,#20C5E8,#8067FF); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div>
+                <div style="font-family:var(--font-head); font-size:22px; font-weight:700;">4. Language</div>
+                <div style="font-size:15px; color:var(--slate);">Understanding, translating &amp; replying naturally</div>
+              </div>
+            </div>
+
+            <div class="card" style="padding:20px 24px; display:flex; align-items:center; gap:18px;">
+              <div style="width:58px; height:58px; border-radius:16px; background:linear-gradient(135deg,#8067FF,#1769FF); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a3 3 0 0 1 5 1c0 2-3 2-3 4"/><circle cx="12" cy="17" r="0.8" fill="#fff"/></svg>
+              </div>
+              <div>
+                <div style="font-family:var(--font-head); font-size:22px; font-weight:700;">5. Reasoning</div>
+                <div style="font-size:15px; color:var(--slate);">Solving problems &amp; making logical decisions</div>
+              </div>
+            </div>
+
+            <div class="card" style="padding:20px 24px; display:flex; align-items:center; gap:18px;">
+              <div style="width:58px; height:58px; border-radius:16px; background:linear-gradient(135deg,#8067FF,#20C5E8); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg>
+              </div>
+              <div>
+                <div style="font-family:var(--font-head); font-size:22px; font-weight:700;">6. Generation</div>
+                <div style="font-size:15px; color:var(--slate);">Creating original text, visuals, audio &amp; code</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 4: DIFFERENT WAYS TO CLASSIFY AI
+    ========================================================== -->
+    <section class="slide" id="slide-4" data-chapter="Chapter 1 · Discovering AI" data-title="Two Ways to Classify AI">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 1 · Discovering AI</div>
+        <div class="slide-meta-right"><span class="slide-badge-num">04 / 21</span></div>
+      </div>
+
+      <h1 class="slide-title anim-1">TWO WAYS TO <span class="gradient-text">CLASSIFY AI</span></h1>
+
+      <div class="slide-body">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 36px; height: 610px;">
+
+          <!-- Left Panel: BY CAPABILITY -->
+          <div class="card anim-2" style="padding: 30px 32px; display:flex; flex-direction:column; border-top: 6px solid #1769FF;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
+              <div>
+                <span class="tag tag-blue">CLASSIFICATION 1</span>
+                <h2 style="font-family:var(--font-head); font-size:28px; font-weight:800; margin-top:8px;">By Capability</h2>
+              </div>
+              <div style="text-align:right; font-size:14px; font-weight:600; color:var(--slate);">How broad is<br>its intelligence?</div>
+            </div>
+
+            <!-- 3 Progressive Tiers -->
+            <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap: 16px;">
+              <!-- Narrow AI -->
+              <div style="padding:18px 22px; border-radius:18px; background:linear-gradient(135deg, #EEF5FF 0%, #FFFFFF 100%); border:2px solid #1769FF; display:flex; align-items:center; justify-content:space-between; gap:16px; box-shadow:0 8px 24px rgba(23,105,255,0.12);">
+                <div style="display:flex; align-items:center; gap:16px;">
+                  <div style="width:48px; height:48px; border-radius:14px; background:#1769FF; color:#fff; display:flex; align-items:center; justify-content:center; font-family:var(--font-head); font-weight:800; font-size:20px;">1</div>
+                  <div>
+                    <div style="font-family:var(--font-head); font-size:21px; font-weight:700; color:var(--navy);">Narrow AI</div>
+                    <div style="font-size:14px; color:var(--slate);">Specialized in one specific task (ChatGPT, Maps, Face ID)</div>
+                  </div>
+                </div>
+                <span class="tag tag-emerald" style="flex-shrink:0;">● We Are Here</span>
+              </div>
+
+              <!-- AGI -->
+              <div style="padding:18px 22px; border-radius:18px; background:#F5F9FF; border:1px solid rgba(32,197,232,0.35); display:flex; align-items:center; justify-content:space-between; gap:16px;">
+                <div style="display:flex; align-items:center; gap:16px;">
+                  <div style="width:48px; height:48px; border-radius:14px; background:#20C5E8; color:#fff; display:flex; align-items:center; justify-content:center; font-family:var(--font-head); font-weight:800; font-size:20px;">2</div>
+                  <div>
+                    <div style="font-family:var(--font-head); font-size:21px; font-weight:700; color:var(--navy);">General AI (AGI)</div>
+                    <div style="font-size:14px; color:var(--slate);">Human-level flexibility across any intellectual task</div>
+                  </div>
+                </div>
+                <span class="tag tag-cyan" style="flex-shrink:0;">Research Goal</span>
+              </div>
+
+              <!-- ASI -->
+              <div style="padding:18px 22px; border-radius:18px; background:#F9F7FF; border:1px dashed rgba(128,103,255,0.45); display:flex; align-items:center; justify-content:space-between; gap:16px;">
+                <div style="display:flex; align-items:center; gap:16px;">
+                  <div style="width:48px; height:48px; border-radius:14px; background:#8067FF; color:#fff; display:flex; align-items:center; justify-content:center; font-family:var(--font-head); font-weight:800; font-size:20px;">3</div>
+                  <div>
+                    <div style="font-family:var(--font-head); font-size:21px; font-weight:700; color:var(--navy);">Superintelligence (ASI)</div>
+                    <div style="font-size:14px; color:var(--slate);">Exceeds human cognitive abilities across all fields</div>
+                  </div>
+                </div>
+                <span class="tag tag-violet" style="flex-shrink:0;">Hypothetical</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Panel: BY TECHNOLOGY -->
+          <div class="card anim-3" style="padding: 30px 32px; display:flex; flex-direction:column; border-top: 6px solid #8067FF;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
+              <div>
+                <span class="tag tag-violet">CLASSIFICATION 2</span>
+                <h2 style="font-family:var(--font-head); font-size:28px; font-weight:800; margin-top:8px;">By Technology</h2>
+              </div>
+              <div style="text-align:right; font-size:14px; font-weight:600; color:var(--slate);">How is the system<br>built &amp; trained?</div>
+            </div>
+
+            <!-- 4-Layer Visual Stack / Nested Diagram -->
+            <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:12px;">
+              <div style="padding:16px 22px; border-radius:18px; background:#F4F8FF; border:1.5px solid rgba(21,35,59,0.16); display:flex; align-items:center; justify-content:space-between;">
+                <div style="display:flex; align-items:center; gap:14px;">
+                  <span style="font-family:var(--font-mono); font-size:13px; font-weight:700; padding:6px 10px; border-radius:8px; background:#15233B; color:#fff;">IF/THEN</span>
+                  <div>
+                    <div style="font-family:var(--font-head); font-size:19px; font-weight:700;">Rule-Based Systems</div>
+                    <div style="font-size:13px; color:var(--slate);">Explicit human-written logic rules</div>
+                  </div>
+                </div>
+                <span style="font-size:12px; font-weight:700; color:var(--muted);">1950s+</span>
+              </div>
+
+              <div style="padding:16px 22px; border-radius:18px; background:#EAF3FF; border:1.5px solid rgba(23,105,255,0.28); display:flex; align-items:center; justify-content:space-between;">
+                <div style="display:flex; align-items:center; gap:14px;">
+                  <span style="font-family:var(--font-mono); font-size:13px; font-weight:700; padding:6px 10px; border-radius:8px; background:#1769FF; color:#fff;">DATA</span>
+                  <div>
+                    <div style="font-family:var(--font-head); font-size:19px; font-weight:700;">Machine Learning</div>
+                    <div style="font-size:13px; color:var(--slate);">Learns statistical patterns from examples</div>
+                  </div>
+                </div>
+                <span style="font-size:12px; font-weight:700; color:var(--primary);">Subset of AI</span>
+              </div>
+
+              <div style="padding:16px 22px; border-radius:18px; background:#E6FAFF; border:1.5px solid rgba(32,197,232,0.40); display:flex; align-items:center; justify-content:space-between;">
+                <div style="display:flex; align-items:center; gap:14px;">
+                  <span style="font-family:var(--font-mono); font-size:13px; font-weight:700; padding:6px 10px; border-radius:8px; background:#0891B2; color:#fff;">LAYERS</span>
+                  <div>
+                    <div style="font-family:var(--font-head); font-size:19px; font-weight:700;">Deep Learning</div>
+                    <div style="font-size:13px; color:var(--slate);">Multi-layer neural networks</div>
+                  </div>
+                </div>
+                <span style="font-size:12px; font-weight:700; color:#0891B2;">Subset of ML</span>
+              </div>
+
+              <div style="padding:16px 22px; border-radius:18px; background:linear-gradient(135deg, #F0ECFF 0%, #E8F4FF 100%); border:2px solid #8067FF; display:flex; align-items:center; justify-content:space-between;">
+                <div style="display:flex; align-items:center; gap:14px;">
+                  <span style="font-family:var(--font-mono); font-size:13px; font-weight:700; padding:6px 10px; border-radius:8px; background:#8067FF; color:#fff;">CREATE</span>
+                  <div>
+                    <div style="font-family:var(--font-head); font-size:19px; font-weight:700;">Generative AI</div>
+                    <div style="font-size:13px; color:var(--slate);">Creates new text, images, audio &amp; video</div>
+                  </div>
+                </div>
+                <span class="tag tag-violet">Modern Frontier</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 5: WHAT IS MACHINE LEARNING?
+    ========================================================== -->
+    <section class="slide" id="slide-5" data-chapter="Chapter 2 · Understanding Machine Learning" data-title="What Is Machine Learning?">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 2 · Understanding Machine Learning</div>
+        <div class="slide-meta-right"><span class="slide-badge-num">05 / 21</span></div>
+      </div>
+
+      <h1 class="slide-title anim-1">WHAT IS <span class="gradient-text">MACHINE LEARNING?</span></h1>
+
+      <div class="def-banner anim-2" style="margin-bottom: 34px;">
+        <div style="width:40px; height:40px; border-radius:12px; background:var(--cyan-soft); color:#0891B2; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:800; font-size:18px;">ML</div>
+        <div>A subset of AI that <strong>learns patterns from data</strong> to make predictions or decisions.</div>
+      </div>
+
+      <div class="slide-body">
+        <!-- Giant 4-Stage Visual Flow: Data -> Learning -> Model -> Prediction -->
+        <div class="anim-3" style="display:grid; grid-template-columns: 1fr 70px 1fr 70px 1fr 70px 1fr; align-items:center; height:430px;">
+
+          <!-- 1. DATA -->
+          <div class="card" style="height:380px; padding:26px; display:flex; flex-direction:column; align-items:center; justify-content:space-between; text-align:center; border-top:6px solid #1769FF;">
+            <span class="tag tag-blue">INPUT</span>
+            <svg width="130" height="130" viewBox="0 0 130 130" fill="none">
+              <rect x="20" y="22" width="40" height="46" rx="8" fill="#E6F0FF" stroke="#1769FF" stroke-width="2.5"/>
+              <line x1="29" y1="36" x2="51" y2="36" stroke="#1769FF" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="29" y1="47" x2="46" y2="47" stroke="#1769FF" stroke-width="2.5" stroke-linecap="round"/>
+              <rect x="70" y="22" width="40" height="46" rx="8" fill="#E4FAFF" stroke="#20C5E8" stroke-width="2.5"/>
+              <circle cx="90" cy="40" r="8" fill="#20C5E8"/>
+              <path d="M77 58 L86 49 L95 56 L103 48" stroke="#0891B2" stroke-width="2.2" fill="none"/>
+              <rect x="38" y="76" width="54" height="36" rx="8" fill="#EFEAFF" stroke="#8067FF" stroke-width="2.5"/>
+              <circle cx="54" cy="94" r="4" fill="#8067FF"/>
+              <circle cx="66" cy="94" r="4" fill="#8067FF"/>
+              <circle cx="78" cy="94" r="4" fill="#8067FF"/>
+            </svg>
+            <div>
+              <div style="font-family:var(--font-head); font-size:28px; font-weight:800;">Data</div>
+              <div style="font-size:15px; color:var(--slate); margin-top:6px;">Images, numbers, text &amp; examples</div>
+            </div>
+          </div>
+
+          <!-- Arrow 1 -->
+          <div style="display:flex; justify-content:center;">
+            <svg width="56" height="32" viewBox="0 0 56 32" fill="none">
+              <path d="M4 16 H46" stroke="#1769FF" stroke-width="3.5" class="dash-flow"/>
+              <path d="M38 7 L49 16 L38 25" stroke="#1769FF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <!-- 2. LEARNING -->
+          <div class="card" style="height:380px; padding:26px; display:flex; flex-direction:column; align-items:center; justify-content:space-between; text-align:center; border-top:6px solid #20C5E8;">
+            <span class="tag tag-cyan">PROCESS</span>
+            <svg width="130" height="130" viewBox="0 0 130 130" fill="none">
+              <circle cx="65" cy="65" r="44" fill="#ECFCFF" stroke="#20C5E8" stroke-width="2.5" stroke-dasharray="6 5"/>
+              <path d="M30 88 C45 86, 52 52, 68 50 C82 48, 86 32, 102 30" stroke="#1769FF" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="46" cy="70" r="5" fill="#8067FF"/>
+              <circle cx="68" cy="50" r="6" fill="#1769FF"/>
+              <circle cx="92" cy="34" r="5" fill="#20C5E8"/>
+            </svg>
+            <div>
+              <div style="font-family:var(--font-head); font-size:28px; font-weight:800;">Learning</div>
+              <div style="font-size:15px; color:var(--slate); margin-top:6px;">Algorithm discovers hidden patterns</div>
+            </div>
+          </div>
+
+          <!-- Arrow 2 -->
+          <div style="display:flex; justify-content:center;">
+            <svg width="56" height="32" viewBox="0 0 56 32" fill="none">
+              <path d="M4 16 H46" stroke="#20C5E8" stroke-width="3.5" class="dash-flow"/>
+              <path d="M38 7 L49 16 L38 25" stroke="#20C5E8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <!-- 3. MODEL -->
+          <div class="card" style="height:380px; padding:26px; display:flex; flex-direction:column; align-items:center; justify-content:space-between; text-align:center; border-top:6px solid #8067FF;">
+            <span class="tag tag-violet">ARTIFACT</span>
+            <svg width="130" height="130" viewBox="0 0 130 130" fill="none">
+              <polygon points="65,18 106,42 106,88 65,112 24,88 24,42" fill="#F2EEFF" stroke="#8067FF" stroke-width="3"/>
+              <line x1="65" y1="18" x2="65" y2="65" stroke="#8067FF" stroke-width="2.2"/>
+              <line x1="24" y1="42" x2="65" y2="65" stroke="#1769FF" stroke-width="2.2"/>
+              <line x1="106" y1="42" x2="65" y2="65" stroke="#20C5E8" stroke-width="2.2"/>
+              <circle cx="65" cy="65" r="10" fill="#1769FF"/>
+            </svg>
+            <div>
+              <div style="font-family:var(--font-head); font-size:28px; font-weight:800;">Model</div>
+              <div style="font-size:15px; color:var(--slate); margin-top:6px;">Trained brain ready to generalize</div>
+            </div>
+          </div>
+
+          <!-- Arrow 3 -->
+          <div style="display:flex; justify-content:center;">
+            <svg width="56" height="32" viewBox="0 0 56 32" fill="none">
+              <path d="M4 16 H46" stroke="#8067FF" stroke-width="3.5" class="dash-flow"/>
+              <path d="M38 7 L49 16 L38 25" stroke="#8067FF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <!-- 4. PREDICTION -->
+          <div class="card" style="height:380px; padding:26px; display:flex; flex-direction:column; align-items:center; justify-content:space-between; text-align:center; border-top:6px solid #10B981; background:linear-gradient(170deg, #FFFFFF 0%, #ECFDF5 100%);">
+            <span class="tag tag-emerald">OUTPUT</span>
+            <svg width="130" height="130" viewBox="0 0 130 130" fill="none">
+              <circle cx="65" cy="65" r="42" fill="#D1FAE5" stroke="#10B981" stroke-width="3"/>
+              <path d="M46 66 L59 79 L86 50" stroke="#059669" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <div style="font-family:var(--font-head); font-size:28px; font-weight:800;">Prediction</div>
+              <div style="font-size:15px; color:var(--slate); margin-top:6px;">Accurate decisions on new data</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 6: HOW DOES MACHINE LEARNING WORK?
+    ========================================================== -->
+    <section class="slide" id="slide-6" data-chapter="Chapter 2 · Understanding Machine Learning" data-title="How Does Machine Learning Work?">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 2 · Understanding Machine Learning</div>
+        <div class="slide-meta-right"><span class="slide-badge-num">06 / 21</span></div>
+      </div>
+
+      <h1 class="slide-title anim-1">HOW DOES <span class="gradient-text">MACHINE LEARNING WORK?</span></h1>
+      <p class="anim-2" style="font-size:20px; color:var(--slate); margin-bottom:26px;">Four clear stages turn raw examples into a reliable, intelligent system.</p>
+
+      <div class="slide-body">
+        <div style="position:relative; padding-bottom:64px;">
+          <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 26px;">
+
+            <!-- Step 1 -->
+            <div class="card anim-2" style="padding:28px 24px; height:430px; display:flex; flex-direction:column; justify-content:space-between;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="width:54px; height:54px; border-radius:16px; background:#1769FF; color:#fff; font-family:var(--font-head); font-size:24px; font-weight:800; display:flex; align-items:center; justify-content:center;">1</div>
+                <span class="tag tag-blue">STAGE 01</span>
+              </div>
+              <div style="height:170px; border-radius:16px; background:#F5F9FF; display:flex; align-items:center; justify-content:center;">
+                <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                  <ellipse cx="60" cy="34" rx="34" ry="12" fill="#DBEAFE" stroke="#1769FF" stroke-width="2.5"/>
+                  <path d="M26 34 V60 C26 67, 94 67, 94 60 V34" stroke="#1769FF" stroke-width="2.5" fill="#EFF6FF"/>
+                  <path d="M26 60 V86 C26 93, 94 93, 94 86 V60" stroke="#1769FF" stroke-width="2.5" fill="#DBEAFE"/>
+                  <ellipse cx="60" cy="34" rx="34" ry="12" fill="#BFDBFE" stroke="#1769FF" stroke-width="2.5"/>
+                </svg>
+              </div>
+              <div style="height:96px;">
+                <h3 style="font-family:var(--font-head); font-size:25px; font-weight:700;">Collect Data</h3>
+                <p style="font-size:15px; color:var(--slate); margin-top:6px;">Gather &amp; clean diverse, relevant examples.</p>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="card anim-3" style="padding:28px 24px; height:430px; display:flex; flex-direction:column; justify-content:space-between;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="width:54px; height:54px; border-radius:16px; background:#20C5E8; color:#fff; font-family:var(--font-head); font-size:24px; font-weight:800; display:flex; align-items:center; justify-content:center;">2</div>
+                <span class="tag tag-cyan">STAGE 02</span>
+              </div>
+              <div style="height:170px; border-radius:16px; background:#F0FCFF; display:flex; align-items:center; justify-content:center;">
+                <svg width="140" height="110" viewBox="0 0 140 110" fill="none">
+                  <path d="M18 20 Q42 78, 122 86" stroke="#20C5E8" stroke-width="4" fill="none" stroke-linecap="round"/>
+                  <circle cx="38" cy="54" r="5" fill="#1769FF"/>
+                  <circle cx="70" cy="76" r="5" fill="#1769FF"/>
+                  <circle cx="110" cy="85" r="6" fill="#0891B2"/>
+                  <text x="70" y="28" fill="#0891B2" font-size="12" font-weight="700" text-anchor="middle" font-family="Inter">Error Drops ↓</text>
+                </svg>
+              </div>
+              <div style="height:96px;">
+                <h3 style="font-family:var(--font-head); font-size:25px; font-weight:700;">Train Model</h3>
+                <p style="font-size:15px; color:var(--slate); margin-top:6px;">Adjust internal weights to minimize mistakes.</p>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="card anim-4" style="padding:28px 24px; height:430px; display:flex; flex-direction:column; justify-content:space-between;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="width:54px; height:54px; border-radius:16px; background:#8067FF; color:#fff; font-family:var(--font-head); font-size:24px; font-weight:800; display:flex; align-items:center; justify-content:center;">3</div>
+                <span class="tag tag-violet">STAGE 03</span>
+              </div>
+              <div style="height:170px; border-radius:16px; background:#F5F2FF; display:flex; align-items:center; justify-content:center;">
+                <svg width="140" height="110" viewBox="0 0 140 110" fill="none">
+                  <path d="M24 72 A46 46 0 0 1 116 72" stroke="#E2DCFF" stroke-width="11" stroke-linecap="round"/>
+                  <path d="M24 72 A46 46 0 0 1 108 42" stroke="#8067FF" stroke-width="11" stroke-linecap="round"/>
+                  <text x="70" y="68" fill="#15233B" font-size="22" font-weight="800" text-anchor="middle" font-family="Poppins">94%</text>
+                  <text x="70" y="96" fill="#6346FA" font-size="11" font-weight="700" text-anchor="middle" font-family="Inter">TEST ACCURACY</text>
+                </svg>
+              </div>
+              <div style="height:96px;">
+                <h3 style="font-family:var(--font-head); font-size:25px; font-weight:700;">Evaluate Model</h3>
+                <p style="font-size:15px; color:var(--slate); margin-top:6px;">Test performance on brand-new unseen data.</p>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="card anim-5" style="padding:28px 24px; height:430px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(170deg, #FFFFFF 0%, #EEF6FF 100%);">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="width:54px; height:54px; border-radius:16px; background:linear-gradient(135deg,#1769FF,#8067FF); color:#fff; font-family:var(--font-head); font-size:24px; font-weight:800; display:flex; align-items:center; justify-content:center;">4</div>
+                <span class="tag tag-emerald">STAGE 04</span>
+              </div>
+              <div style="height:170px; border-radius:16px; background:#FFFFFF; border:1px solid rgba(16,185,129,0.22); display:flex; align-items:center; justify-content:center;">
+                <svg width="130" height="100" viewBox="0 0 130 100" fill="none">
+                  <rect x="14" y="18" width="102" height="64" rx="14" fill="#ECFDF5" stroke="#10B981" stroke-width="2.5"/>
+                  <path d="M40 52 L56 66 L90 34" stroke="#059669" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div style="height:96px;">
+                <h3 style="font-family:var(--font-head); font-size:25px; font-weight:700;">Make Predictions</h3>
+                <p style="font-size:15px; color:var(--slate); margin-top:6px;">Deploy the model in the real world.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Feedback loop visual arrow (Step 3 -> Step 2) -->
+          <svg width="1464" height="58" viewBox="0 0 1464 58" style="position:absolute; bottom:0; left:0; pointer-events:none;">
+            <path d="M910 4 V32 Q910 46 894 46 H564 Q548 46 548 32 V10" stroke="#8067FF" stroke-width="2.5" fill="none" class="dash-flow"/>
+            <path d="M540 16 L548 5 L556 16" stroke="#8067FF" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="652" y="30" width="160" height="24" rx="12" fill="#F2EEFF" stroke="#8067FF" stroke-width="1"/>
+            <text x="732" y="46" fill="#6346FA" font-size="12" font-weight="700" text-anchor="middle" font-family="Inter">Iterate &amp; Tune</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 7: THREE TYPES OF MACHINE LEARNING
+    ========================================================== -->
+    <section class="slide" id="slide-7" data-chapter="Chapter 2 · Understanding Machine Learning" data-title="Three Types of Machine Learning">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 2 · Understanding Machine Learning</div>
+        <div class="slide-meta-right"><span class="slide-badge-num">07 / 21</span></div>
+      </div>
+
+      <h1 class="slide-title anim-1">THREE TYPES OF <span class="gradient-text">MACHINE LEARNING</span></h1>
+
+      <div class="slide-body">
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 30px; height: 590px;">
+
+          <!-- Card 1: Supervised Learning -->
+          <div class="card anim-2" style="padding:30px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #1769FF;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="tag tag-blue">TYPE 01</span>
+              <span style="font-size:13px; font-weight:700; color:var(--primary);">Labeled Data</span>
+            </div>
+            <!-- SVG Illustration: Labeled Emails -> Spam vs Safe -->
+            <div style="height:255px; border-radius:18px; background:#F4F8FF; border:1px solid rgba(23,105,255,0.12); display:flex; align-items:center; justify-content:center; margin:16px 0;">
+              <svg width="340" height="220" viewBox="0 0 340 220" fill="none">
+                <rect x="20" y="34" width="118" height="58" rx="12" fill="#FFFFFF" stroke="#1769FF" stroke-width="2"/>
+                <text x="42" y="60" fill="#15233B" font-size="13" font-weight="700" font-family="Inter">Win $$$ Now</text>
+                <rect x="38" y="68" width="56" height="16" rx="8" fill="#FFE4E6"/>
+                <text x="66" y="80" fill="#E11D48" font-size="10" font-weight="800" text-anchor="middle" font-family="Inter">SPAM</text>
+
+                <rect x="20" y="124" width="118" height="58" rx="12" fill="#FFFFFF" stroke="#1769FF" stroke-width="2"/>
+                <text x="36" y="150" fill="#15233B" font-size="13" font-weight="700" font-family="Inter">Class Notes</text>
+                <rect x="38" y="158" width="56" height="16" rx="8" fill="#DCFCE7"/>
+                <text x="66" y="170" fill="#059669" font-size="10" font-weight="800" text-anchor="middle" font-family="Inter">SAFE</text>
+
+                <path d="M148 63 H196 L216 110 M148 153 H196 L216 110" stroke="#1769FF" stroke-width="2.5" stroke-dasharray="5 5"/>
+                <circle cx="268" cy="110" r="44" fill="#1769FF"/>
+                <text x="268" y="106" fill="#fff" font-size="13" font-weight="700" text-anchor="middle" font-family="Poppins">Teacher</text>
+                <text x="268" y="124" fill="#BFDBFE" font-size="11" font-weight="600" text-anchor="middle" font-family="Inter">Labels</text>
+              </svg>
+            </div>
+            <div>
+              <h2 style="font-family:var(--font-head); font-size:27px; font-weight:800;">Supervised Learning</h2>
+              <p style="font-size:17px; color:var(--slate); margin-top:6px;">Learning from <strong>labeled examples</strong>.</p>
+              <div style="margin-top:16px; padding:12px 16px; border-radius:12px; background:var(--primary-soft); color:var(--primary); font-weight:700; font-size:15px;">
+                Example: Spam detection
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Unsupervised Learning -->
+          <div class="card anim-3" style="padding:30px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #20C5E8;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="tag tag-cyan">TYPE 02</span>
+              <span style="font-size:13px; font-weight:700; color:#0891B2;">No Labels</span>
+            </div>
+            <!-- SVG Illustration: Customer Cluster Discovery -->
+            <div style="height:255px; border-radius:18px; background:#F0FCFF; border:1px solid rgba(32,197,232,0.18); display:flex; align-items:center; justify-content:center; margin:16px 0;">
+              <svg width="340" height="220" viewBox="0 0 340 220" fill="none">
+                <circle cx="95" cy="76" r="50" fill="rgba(23,105,255,0.12)" stroke="#1769FF" stroke-width="2" stroke-dasharray="5 4"/>
+                <circle cx="80" cy="64" r="7" fill="#1769FF"/><circle cx="106" cy="60" r="7" fill="#1769FF"/><circle cx="92" cy="86" r="7" fill="#1769FF"/><circle cx="114" cy="84" r="7" fill="#1769FF"/>
+
+                <circle cx="242" cy="78" r="48" fill="rgba(32,197,232,0.16)" stroke="#0891B2" stroke-width="2" stroke-dasharray="5 4"/>
+                <circle cx="228" cy="68" r="7" fill="#0891B2"/><circle cx="252" cy="65" r="7" fill="#0891B2"/><circle cx="240" cy="92" r="7" fill="#0891B2"/><circle cx="262" cy="88" r="7" fill="#0891B2"/>
+
+                <circle cx="170" cy="150" r="42" fill="rgba(128,103,255,0.14)" stroke="#8067FF" stroke-width="2" stroke-dasharray="5 4"/>
+                <circle cx="156" cy="142" r="7" fill="#8067FF"/><circle cx="182" cy="144" r="7" fill="#8067FF"/><circle cx="168" cy="164" r="7" fill="#8067FF"/>
+
+                <text x="95" y="136" fill="#1769FF" font-size="11" font-weight="800" text-anchor="middle" font-family="Inter">Cluster A</text>
+                <text x="242" y="136" fill="#0891B2" font-size="11" font-weight="800" text-anchor="middle" font-family="Inter">Cluster B</text>
+                <text x="170" y="208" fill="#6346FA" font-size="11" font-weight="800" text-anchor="middle" font-family="Inter">Cluster C</text>
+              </svg>
+            </div>
+            <div>
+              <h2 style="font-family:var(--font-head); font-size:27px; font-weight:800;">Unsupervised Learning</h2>
+              <p style="font-size:17px; color:var(--slate); margin-top:6px;"><strong>Discovering hidden patterns</strong> in raw data.</p>
+              <div style="margin-top:16px; padding:12px 16px; border-radius:12px; background:var(--cyan-soft); color:#0891B2; font-weight:700; font-size:15px;">
+                Example: Customer segmentation
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Reinforcement Learning -->
+          <div class="card anim-4" style="padding:30px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #8067FF;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="tag tag-violet">TYPE 03</span>
+              <span style="font-size:13px; font-weight:700; color:#6346FA;">Trial &amp; Feedback</span>
+            </div>
+            <!-- SVG Illustration: Game Agent -> Goal Reward -->
+            <div style="height:255px; border-radius:18px; background:#F6F3FF; border:1px solid rgba(128,103,255,0.18); display:flex; align-items:center; justify-content:center; margin:16px 0;">
+              <svg width="340" height="220" viewBox="0 0 340 220" fill="none">
+                <!-- Grid -->
+                <rect x="46" y="34" width="248" height="152" rx="14" fill="#fff" stroke="#DDD6FE" stroke-width="2"/>
+                <path d="M108 34 V186 M170 34 V186 M232 34 V186 M46 84 H294 M46 135 H294" stroke="#F1ECFF" stroke-width="2"/>
+                <!-- Optimal path -->
+                <path d="M77 160 H139 V110 H201 V60 H263" stroke="#8067FF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 6"/>
+                <!-- Agent -->
+                <circle cx="77" cy="160" r="18" fill="#1769FF"/>
+                <text x="77" y="164" fill="#fff" font-size="11" font-weight="800" text-anchor="middle" font-family="Inter">AI</text>
+                <!-- Reward Star -->
+                <circle cx="263" cy="60" r="20" fill="#FEF3C7" stroke="#F59E0B" stroke-width="2.5"/>
+                <text x="263" y="65" fill="#B45309" font-size="13" font-weight="800" text-anchor="middle" font-family="Inter">+10</text>
+              </svg>
+            </div>
+            <div>
+              <h2 style="font-family:var(--font-head); font-size:27px; font-weight:800;">Reinforcement Learning</h2>
+              <p style="font-size:17px; color:var(--slate); margin-top:6px;">Learning through <strong>rewards &amp; penalties</strong>.</p>
+              <div style="margin-top:16px; padding:12px 16px; border-radius:12px; background:var(--violet-soft); color:#6346FA; font-weight:700; font-size:15px;">
+                Example: Game-playing agents
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 8: TRADITIONAL PROGRAMMING VS MACHINE LEARNING
+    ========================================================== -->
+    <section class="slide" id="slide-8" data-chapter="Chapter 2 · Understanding Machine Learning" data-title="Traditional Programming vs Machine Learning">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 2 · Understanding Machine Learning</div>
+        <div class="slide-meta-right"><span class="slide-badge-num">08 / 21</span></div>
+      </div>
+
+      <h1 class="slide-title anim-1">TRADITIONAL PROGRAMMING <span class="gradient-text">VS MACHINE LEARNING</span></h1>
+
+      <div class="slide-body">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 24px;">
+
+          <!-- Left: Traditional Programming -->
+          <div class="card anim-2" style="padding:32px; border-top:6px solid #4B5E7D; display:flex; flex-direction:column; gap:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <span class="tag tag-navy">CLASSIC APPROACH</span>
+                <h2 style="font-family:var(--font-head); font-size:28px; font-weight:800; margin-top:8px;">Traditional Programming</h2>
+              </div>
+              <div style="width:48px;height:48px;border-radius:14px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-weight:800;color:#4B5E7D;">{ }</div>
+            </div>
+
+            <!-- Flow Diagram: Rules + Data -> Output -->
+            <div style="padding:26px 20px; border-radius:18px; background:#F8FAFC; border:1px solid #E2E8F0; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+              <div style="display:flex; flex-direction:column; gap:12px; width:190px;">
+                <div style="padding:14px 16px; border-radius:14px; background:#FFFFFF; border:1.5px solid #94A3B8; text-align:center;">
+                  <div style="font-family:var(--font-head); font-size:18px; font-weight:800; color:var(--navy);">Rules</div>
+                  <div style="font-family:var(--font-mono); font-size:12px; color:var(--slate); margin-top:3px;">IF "win" → Spam</div>
+                </div>
+                <div style="text-align:center; font-weight:800; font-size:18px; color:#64748B;">+</div>
+                <div style="padding:14px 16px; border-radius:14px; background:#FFFFFF; border:1.5px solid #94A3B8; text-align:center;">
+                  <div style="font-family:var(--font-head); font-size:18px; font-weight:800; color:var(--navy);">Data</div>
+                  <div style="font-size:12px; color:var(--slate); margin-top:3px;">Incoming Email</div>
+                </div>
+              </div>
+
+              <svg width="46" height="28" viewBox="0 0 46 28" fill="none">
+                <path d="M2 14 H38" stroke="#64748B" stroke-width="3"/>
+                <path d="M31 6 L40 14 L31 22" stroke="#64748B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+
+              <div style="padding:22px 16px; border-radius:16px; background:#15233B; color:#fff; text-align:center; width:140px;">
+                <div style="font-size:26px;">💻</div>
+                <div style="font-family:var(--font-head); font-size:16px; font-weight:700; margin-top:6px;">Computer</div>
+              </div>
+
+              <svg width="46" height="28" viewBox="0 0 46 28" fill="none">
+                <path d="M2 14 H38" stroke="#64748B" stroke-width="3"/>
+                <path d="M31 6 L40 14 L31 22" stroke="#64748B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+
+              <div style="padding:22px 16px; border-radius:16px; background:#E2E8F0; text-align:center; width:145px;">
+                <div style="font-family:var(--font-head); font-size:19px; font-weight:800; color:var(--navy);">Output</div>
+                <div style="font-size:12px; color:var(--slate); margin-top:4px;">Fixed Answer</div>
+              </div>
+            </div>
+
+            <div style="font-size:16px; color:var(--slate); display:flex; align-items:center; gap:10px;">
+              <span style="color:#E11D48; font-weight:800;">✕</span>
+              <span>Humans must hand-code every single edge case.</span>
+            </div>
+          </div>
+
+          <!-- Right: Machine Learning -->
+          <div class="card anim-3" style="padding:32px; border-top:6px solid #1769FF; background:linear-gradient(170deg, #FFFFFF 0%, #EEF5FF 100%); display:flex; flex-direction:column; gap:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <span class="tag tag-blue">AI PARADIGM</span>
+                <h2 style="font-family:var(--font-head); font-size:28px; font-weight:800; margin-top:8px;">Machine Learning</h2>
+              </div>
+              <div style="width:48px;height:48px;border-radius:14px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-weight:800;">ML</div>
+            </div>
+
+            <!-- Flow Diagram: Data + Expected Answers -> Learned Model -->
+            <div style="padding:26px 20px; border-radius:18px; background:#FFFFFF; border:1.5px solid rgba(23,105,255,0.22); display:flex; align-items:center; justify-content:space-between; gap:12px;">
+              <div style="display:flex; flex-direction:column; gap:12px; width:190px;">
+                <div style="padding:14px 16px; border-radius:14px; background:#F5F9FF; border:1.5px solid #1769FF; text-align:center;">
+                  <div style="font-family:var(--font-head); font-size:18px; font-weight:800; color:#1769FF;">Data</div>
+                  <div style="font-size:12px; color:var(--slate); margin-top:3px;">100,000+ Emails</div>
+                </div>
+                <div style="text-align:center; font-weight:800; font-size:18px; color:#1769FF;">+</div>
+                <div style="padding:14px 16px; border-radius:14px; background:#F0FCFF; border:1.5px solid #20C5E8; text-align:center;">
+                  <div style="font-family:var(--font-head); font-size:17px; font-weight:800; color:#0891B2;">Expected Answers</div>
+                  <div style="font-size:12px; color:var(--slate); margin-top:3px;">Spam / Not Spam</div>
+                </div>
+              </div>
+
+              <svg width="46" height="28" viewBox="0 0 46 28" fill="none">
+                <path d="M2 14 H38" stroke="#1769FF" stroke-width="3" class="dash-flow"/>
+                <path d="M31 6 L40 14 L31 22" stroke="#1769FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+
+              <div style="padding:22px 16px; border-radius:16px; background:linear-gradient(135deg,#1769FF,#20C5E8); color:#fff; text-align:center; width:140px;">
+                <div style="font-size:26px;">⚡</div>
+                <div style="font-family:var(--font-head); font-size:16px; font-weight:700; margin-top:6px;">ML Training</div>
+              </div>
+
+              <svg width="46" height="28" viewBox="0 0 46 28" fill="none">
+                <path d="M2 14 H38" stroke="#8067FF" stroke-width="3" class="dash-flow"/>
+                <path d="M31 6 L40 14 L31 22" stroke="#8067FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+
+              <div style="padding:20px 14px; border-radius:16px; background:linear-gradient(135deg,#F0ECFF,#E8F4FF); border:2px solid #8067FF; text-align:center; width:150px;">
+                <div style="font-family:var(--font-head); font-size:18px; font-weight:800; color:#6346FA;">Learned Model</div>
+                <div style="font-size:12px; color:var(--slate); margin-top:4px;">Rules Discovered!</div>
+              </div>
+            </div>
+
+            <div style="font-size:16px; color:var(--navy); font-weight:600; display:flex; align-items:center; gap:10px;">
+              <span style="color:#059669; font-weight:800;">✓</span>
+              <span>The machine writes its own rules by spotting patterns.</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Real-World Example Strip -->
+        <div class="card anim-4" style="padding:20px 28px; display:flex; align-items:center; justify-content:space-between; background:#FFFFFF;">
+          <div style="display:flex; align-items:center; gap:16px;">
+            <span class="tag tag-violet" style="font-size:13px;">REAL-WORLD EXAMPLE</span>
+            <span style="font-family:var(--font-head); font-size:20px; font-weight:700;">Email Spam Detection</span>
+          </div>
+          <div style="font-size:16px; color:var(--slate);">
+            Scammers easily evade static keyword rules like <code style="background:#F1F5F9; padding:3px 8px; border-radius:6px; font-family:var(--font-mono);">"FREE"</code> — whereas ML adapts by learning thousands of subtle patterns automatically.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 9: DEEP LEARNING
+    ========================================================== -->
+    <section class="slide" id="slide-9" data-chapter="Chapter 2 · Understanding Machine Learning" data-title="Deep Learning">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 2 · Understanding Machine Learning</div>
+        <div class="slide-meta-right"><span class="slide-badge-num">09 / 21</span></div>
+      </div>
+
+      <h1 class="slide-title anim-1"><span class="gradient-text">DEEP LEARNING</span></h1>
+
+      <div class="def-banner anim-2" style="margin-bottom: 22px;">
+        <div style="width:40px; height:40px; border-radius:12px; background:var(--violet-soft); color:#6346FA; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:800; font-size:18px;">DL</div>
+        <div>A subset of Machine Learning using <strong>neural networks with multiple layers</strong>.</div>
+      </div>
+
+      <div class="slide-body">
+        <div style="display:grid; grid-template-columns: 1.55fr 0.75fr; gap: 28px; align-items: stretch; height: 530px;">
+
+          <!-- Neural Network SVG Centerpiece -->
+          <div class="card anim-3" style="padding:24px 28px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(165deg, #FFFFFF 0%, #F4F8FF 100%);">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-family:var(--font-head); font-size:18px; font-weight:700; color:var(--navy);">Multi-Layer Neural Network Architecture</span>
+              <span class="tag tag-blue">Inspired by Biological Neurons</span>
+            </div>
+
+            <svg id="nn-svg" width="100%" height="390" viewBox="0 0 880 390" fill="none">
+              <defs>
+                <linearGradient id="synapseGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#1769FF" stop-opacity="0.35"/>
+                  <stop offset="50%" stop-color="#20C5E8" stop-opacity="0.45"/>
+                  <stop offset="100%" stop-color="#8067FF" stop-opacity="0.35"/>
+                </linearGradient>
+              </defs>
+              <!-- Layer Connections (generated cleanly in JS or pre-drawn) -->
+              <g id="nn-edges"></g>
+              <g id="nn-nodes"></g>
+              <!-- Layer Labels -->
+              <text x="100" y="372" fill="#1769FF" font-size="14" font-weight="800" text-anchor="middle" font-family="Poppins">Input Layer</text>
+              <text x="440" y="372" fill="#0891B2" font-size="14" font-weight="800" text-anchor="middle" font-family="Poppins">Hidden Layers (Deep Feature Extraction)</text>
+              <text x="780" y="372" fill="#6346FA" font-size="14" font-weight="800" text-anchor="middle" font-family="Poppins">Output Layer</text>
+              <!-- Bracket under hidden layers -->
+              <path d="M250 348 H630" stroke="#20C5E8" stroke-width="2.5" stroke-dasharray="5 4"/>
+            </svg>
+          </div>
+
+          <!-- Right: 3 Key Applications -->
+          <div class="anim-4" style="display:flex; flex-direction:column; justify-content:space-between; gap:18px;">
+            <div style="font-family:var(--font-head); font-size:16px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted);">Breakthrough Applications</div>
+
+            <div class="card" style="flex:1; padding:22px 24px; display:flex; align-items:center; gap:18px; border-left:5px solid #1769FF;">
+              <div style="width:58px; height:58px; border-radius:16px; background:var(--primary-soft); color:var(--primary); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
+              </div>
+              <div>
+                <div style="font-family:var(--font-head); font-size:21px; font-weight:700;">Image Recognition</div>
+                <div style="font-size:14px; color:var(--slate); margin-top:3px;">Medical scans, self-driving vision, face detection</div>
+              </div>
+            </div>
+
+            <div class="card" style="flex:1; padding:22px 24px; display:flex; align-items:center; gap:18px; border-left:5px solid #20C5E8;">
+              <div style="width:58px; height:58px; border-radius:16px; background:var(--cyan-soft); color:#0891B2; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+              </div>
+              <div>
+                <div style="font-family:var(--font-head); font-size:21px; font-weight:700;">Speech Recognition</div>
+                <div style="font-size:14px; color:var(--slate); margin-top:3px;">Voice assistants, real-time transcription</div>
+              </div>
+            </div>
+
+            <div class="card" style="flex:1; padding:22px 24px; display:flex; align-items:center; gap:18px; border-left:5px solid #8067FF;">
+              <div style="width:58px; height:58px; border-radius:16px; background:var(--violet-soft); color:#6346FA; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg>
+              </div>
+              <div>
+                <div style="font-family:var(--font-head); font-size:21px; font-weight:700;">Language Processing</div>
+                <div style="font-size:14px; color:var(--slate); margin-top:3px;">Translation, chat, document understanding</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 10: FROM RECOGNIZING TO CREATING — GENERATIVE AI
+    ========================================================== -->
+    <section class="slide" id="slide-10" data-chapter="Chapter 3 · Generative AI" data-title="Generative AI">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 3 · Generative AI</div>
+        <div class="slide-meta-right">
+          <span class="tag tag-violet">From Recognizing → Creating</span>
+          <span class="slide-badge-num">10 / 21</span>
+        </div>
+      </div>
+
+      <h1 class="slide-title anim-1"><span class="gradient-text">GENERATIVE AI</span></h1>
+
+      <div class="def-banner anim-2" style="margin-bottom: 26px;">
+        <div style="width:40px; height:40px; border-radius:12px; background:linear-gradient(135deg,#1769FF,#8067FF); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:800; font-size:20px;">✦</div>
+        <div>AI that <strong>generates brand-new content</strong> based on patterns learned from massive training data.</div>
+      </div>
+
+      <div class="slide-body">
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 26px; height: 500px;">
+
+          <!-- 1. TEXT -->
+          <div class="card anim-2" style="padding:26px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #1769FF;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h2 style="font-family:var(--font-head); font-size:28px; font-weight:800;">Text</h2>
+              <span class="tag tag-blue">Language</span>
+            </div>
+            <div style="flex:1; margin:18px 0; border-radius:16px; background:#F4F8FF; border:1px solid rgba(23,105,255,0.14); padding:18px; display:flex; flex-direction:column; justify-content:center; gap:10px;">
+              <div style="height:12px; width:88%; border-radius:6px; background:#1769FF;"></div>
+              <div style="height:12px; width:72%; border-radius:6px; background:#93C5FD;"></div>
+              <div style="height:12px; width:94%; border-radius:6px; background:#BFDBFE;"></div>
+              <div style="margin-top:8px; padding:10px 12px; border-radius:10px; background:#15233B; color:#7DF2FF; font-family:var(--font-mono); font-size:12px;">def greet(ai):<br>&nbsp;&nbsp;return "Hello!"</div>
+            </div>
+            <div style="font-size:15px; color:var(--slate);">Articles, emails, summaries &amp; code</div>
+          </div>
+
+          <!-- 2. IMAGES (uses real AI-generated artwork!) -->
+          <div class="card anim-3" style="padding:26px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #20C5E8;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h2 style="font-family:var(--font-head); font-size:28px; font-weight:800;">Images</h2>
+              <span class="tag tag-cyan">Visuals</span>
+            </div>
+            <div style="flex:1; margin:18px 0; border-radius:16px; overflow:hidden; border:1px solid rgba(32,197,232,0.25); position:relative;">
+              <img src="assets/genai_sample_art.jpg" alt="AI Generated Sample Art" style="width:100%; height:100%; object-fit:cover;">
+              <span style="position:absolute; bottom:10px; right:10px; background:rgba(21,35,59,0.75); color:#fff; font-size:11px; font-weight:700; padding:4px 10px; border-radius:99px;">AI-Generated Sample</span>
+            </div>
+            <div style="font-size:15px; color:var(--slate);">Illustrations, product photos &amp; concepts</div>
+          </div>
+
+          <!-- 3. AUDIO -->
+          <div class="card anim-4" style="padding:26px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #8067FF;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h2 style="font-family:var(--font-head); font-size:28px; font-weight:800;">Audio</h2>
+              <span class="tag tag-violet">Sound</span>
+            </div>
+            <div style="flex:1; margin:18px 0; border-radius:16px; background:#F6F3FF; border:1px solid rgba(128,103,255,0.18); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:18px; gap:16px;">
+              <svg width="240" height="120" viewBox="0 0 240 120" fill="none">
+                <rect x="14" y="45" width="12" height="30" rx="6" fill="#C4B5FD"/>
+                <rect x="34" y="25" width="12" height="70" rx="6" fill="#8067FF"/>
+                <rect x="54" y="38" width="12" height="44" rx="6" fill="#1769FF"/>
+                <rect x="74" y="14" width="12" height="92" rx="6" fill="#20C5E8"/>
+                <rect x="94" y="30" width="12" height="60" rx="6" fill="#1769FF"/>
+                <rect x="114" y="10" width="12" height="100" rx="6" fill="#8067FF"/>
+                <rect x="134" y="28" width="12" height="64" rx="6" fill="#20C5E8"/>
+                <rect x="154" y="18" width="12" height="84" rx="6" fill="#1769FF"/>
+                <rect x="174" y="38" width="12" height="44" rx="6" fill="#8067FF"/>
+                <rect x="194" y="24" width="12" height="72" rx="6" fill="#20C5E8"/>
+                <rect x="214" y="44" width="12" height="32" rx="6" fill="#C4B5FD"/>
+              </svg>
+              <div style="display:flex; align-items:center; gap:8px; width:100%; padding:8px 12px; border-radius:99px; background:#fff; border:1px solid rgba(128,103,255,0.2);">
+                <span style="width:22px;height:22px;border-radius:50%;background:#8067FF;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;">▶</span>
+                <div style="flex:1;height:5px;border-radius:99px;background:#EDE9FE;overflow:hidden;"><div style="width:65%;height:100%;background:linear-gradient(90deg,#1769FF,#8067FF);"></div></div>
+                <span style="font-family:var(--font-mono);font-size:11px;color:var(--slate);">0:24</span>
+              </div>
+            </div>
+            <div style="font-size:15px; color:var(--slate);">Natural voices, dubbing &amp; music tracks</div>
+          </div>
+
+          <!-- 4. VIDEO -->
+          <div class="card anim-5" style="padding:26px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #15233B;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h2 style="font-family:var(--font-head); font-size:28px; font-weight:800;">Video</h2>
+              <span class="tag tag-navy">Motion</span>
+            </div>
+            <div style="flex:1; margin:18px 0; border-radius:16px; background:linear-gradient(155deg,#15233B 0%,#1E3A6D 100%); padding:18px; display:flex; flex-direction:column; justify-content:space-between; color:#fff;">
+              <div style="display:flex; gap:8px;">
+                <div style="flex:1;height:110px;border-radius:10px;background:linear-gradient(135deg,rgba(32,197,232,0.35),rgba(23,105,255,0.45));border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;">
+                  <div style="width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,0.92);color:#1769FF;display:flex;align-items:center;justify-content:center;font-size:18px;">▶</div>
+                </div>
+              </div>
+              <div style="display:flex; gap:6px;">
+                <div style="flex:1;height:30px;border-radius:6px;background:rgba(255,255,255,0.16);"></div>
+                <div style="flex:1;height:30px;border-radius:6px;background:rgba(32,197,232,0.38);border:1px solid #20C5E8;"></div>
+                <div style="flex:1;height:30px;border-radius:6px;background:rgba(128,103,255,0.35);"></div>
+              </div>
+            </div>
+            <div style="font-size:15px; color:var(--slate);">Short clips, animations &amp; storyboards</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 11: LARGE LANGUAGE MODELS
+    ========================================================== -->
+    <section class="slide" id="slide-11" data-chapter="Chapter 3 · Generative AI" data-title="What Is an LLM?">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 3 · Generative AI</div>
+        <div class="slide-meta-right"><span class="slide-badge-num">11 / 21</span></div>
+      </div>
+
+      <h1 class="slide-title anim-1">WHAT IS AN <span class="gradient-text">LLM?</span></h1>
+
+      <div class="slide-body">
+        <div style="display:grid; grid-template-columns: 1.05fr 0.95fr; gap: 38px; align-items: center; height: 610px;">
+
+          <!-- Left Visual: Bespoke LLM Prism Illustration -->
+          <div class="card anim-2" style="padding:18px; background:#FFFFFF; height:520px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div style="flex:1; border-radius:18px; overflow:hidden; background:#F5F9FF;">
+              <img src="assets/llm_engine.jpg" alt="Large Language Model Processing Text" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <div style="padding:14px 12px 4px; display:flex; align-items:center; justify-content:space-between;">
+              <span style="font-family:var(--font-head); font-size:15px; font-weight:700; color:var(--navy);">Input Text → Neural Context Engine → Fluent Output</span>
+              <span class="tag tag-cyan">Large Language Model</span>
+            </div>
+          </div>
+
+          <!-- Right Explanation & 3 Major Examples -->
+          <div style="display:flex; flex-direction:column; gap:24px;">
+            <div class="card anim-2" style="padding:28px 30px; border-left:5px solid #1769FF;">
+              <div style="font-size:13px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:var(--primary); margin-bottom:8px;">Definition</div>
+              <p style="font-size:23px; line-height:1.45; font-weight:600; color:var(--navy);">
+                An <strong>LLM (Large Language Model)</strong> is an AI model trained on large amounts of text to <strong>process and generate human language</strong>.
+              </p>
+            </div>
+
+            <div class="anim-3" style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px;">
+              <div class="card-soft" style="padding:16px; text-align:center;">
+                <div style="font-family:var(--font-head); font-size:22px; font-weight:800; color:var(--primary);">Understand</div>
+                <div style="font-size:13px; color:var(--slate); margin-top:4px;">Context &amp; intent</div>
+              </div>
+              <div class="card-soft" style="padding:16px; text-align:center;">
+                <div style="font-family:var(--font-head); font-size:22px; font-weight:800; color:#0891B2;">Reason</div>
+                <div style="font-size:13px; color:var(--slate); margin-top:4px;">Summarize &amp; plan</div>
+              </div>
+              <div class="card-soft" style="padding:16px; text-align:center;">
+                <div style="font-family:var(--font-head); font-size:22px; font-weight:800; color:#6346FA;">Generate</div>
+                <div style="font-size:13px; color:var(--slate); margin-top:4px;">Write &amp; translate</div>
+              </div>
+            </div>
+
+            <!-- 3 Prominent Examples: ChatGPT, Gemini, Claude -->
+            <div class="anim-4">
+              <div style="font-family:var(--font-head); font-size:14px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:12px;">Popular Examples You Know</div>
+              <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;">
+
+                <div class="card" style="padding:20px 18px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px;">
+                  <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#10A37F,#20C5E8);display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:800;">✦</div>
+                  <div style="font-family:var(--font-head); font-size:21px; font-weight:800;">ChatGPT</div>
+                  <span style="font-size:12px; font-weight:600; color:var(--muted);">OpenAI</span>
+                </div>
+
+                <div class="card" style="padding:20px 18px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px;">
+                  <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#1769FF,#8067FF);display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:800;">✧</div>
+                  <div style="font-family:var(--font-head); font-size:21px; font-weight:800;">Gemini</div>
+                  <span style="font-size:12px; font-weight:600; color:var(--muted);">Google</span>
+                </div>
+
+                <div class="card" style="padding:20px 18px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px;">
+                  <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#F97316,#F59E0B);display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;font-weight:800;">❖</div>
+                  <div style="font-family:var(--font-head); font-size:21px; font-weight:800;">Claude</div>
+                  <span style="font-size:12px; font-weight:600; color:var(--muted);">Anthropic</span>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 12: AI VS GENERATIVE AI VS LLM
+    ========================================================== -->
+    <section class="slide" id="slide-12" data-chapter="Chapter 3 · Generative AI" data-title="AI vs Generative AI vs LLM">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 3 · Generative AI</div>
+        <div class="slide-meta-right"><span class="slide-badge-num">12 / 21</span></div>
+      </div>
+
+      <h1 class="slide-title anim-1">AI <span class="gradient-text">VS</span> GENERATIVE AI <span class="gradient-text">VS</span> LLM</h1>
+
+      <div class="slide-body">
+        <div style="display:grid; grid-template-columns: 1.15fr 0.85fr; gap: 38px; align-items: center; height: 610px;">
+
+          <!-- Left: Crystal-Clear Nested Venn / Relationship Diagram -->
+          <div class="card anim-2" style="height:575px; padding:24px; display:flex; align-items:center; justify-content:center; background:#FFFFFF;">
+            <svg width="780" height="530" viewBox="0 0 780 530" fill="none">
+              <!-- Outer Circle: Artificial Intelligence -->
+              <rect x="20" y="16" width="740" height="498" rx="48" fill="#EFF6FF" stroke="#1769FF" stroke-width="3"/>
+              <text x="58" y="64" fill="#1769FF" font-size="23" font-weight="800" font-family="Poppins">1. ARTIFICIAL INTELLIGENCE (AI)</text>
+              <text x="58" y="90" fill="#4B5E7D" font-size="14" font-weight="600" font-family="Inter">All intelligent systems — rules, predictions, robotics, vision, search…</text>
+
+              <!-- Middle Container: Generative AI -->
+              <rect x="64" y="122" width="652" height="358" rx="38" fill="#E6FAFF" stroke="#20C5E8" stroke-width="3"/>
+              <text x="102" y="166" fill="#0891B2" font-size="22" font-weight="800" font-family="Poppins">2. GENERATIVE AI</text>
+              <text x="102" y="190" fill="#4B5E7D" font-size="14" font-weight="600" font-family="Inter">Models that create brand-new content across modalities:</text>
+
+              <!-- Inside GenAI: LLMs (ONE category) + Sibling Generative Modalities -->
+              <!-- Highlighted LLM Box -->
+              <rect x="100" y="218" width="320" height="226" rx="28" fill="#FFFFFF" stroke="#8067FF" stroke-width="3.5"/>
+              <rect x="122" y="238" width="166" height="28" rx="14" fill="#8067FF"/>
+              <text x="205" y="256" fill="#FFFFFF" font-size="12" font-weight="800" text-anchor="middle" font-family="Inter">ONE CATEGORY OF GEN AI</text>
+              <text x="122" y="298" fill="#15233B" font-size="22" font-weight="800" font-family="Poppins">3. Language-Focused</text>
+              <text x="122" y="326" fill="#6346FA" font-size="22" font-weight="800" font-family="Poppins">Models (LLMs)</text>
+              <text x="122" y="362" fill="#4B5E7D" font-size="14" font-weight="500" font-family="Inter">Text, conversation &amp; code</text>
+              <rect x="122" y="384" width="276" height="38" rx="12" fill="#F5F2FF"/>
+              <text x="260" y="408" fill="#6346FA" font-size="13" font-weight="700" text-anchor="middle" font-family="Inter">ChatGPT · Gemini · Claude</text>
+
+              <!-- Sibling GenAI Modalities (Not LLMs!) -->
+              <rect x="444" y="218" width="236" height="104" rx="22" fill="#FFFFFF" stroke="#20C5E8" stroke-width="2" stroke-dasharray="6 4"/>
+              <text x="466" y="254" fill="#15233B" font-size="18" font-weight="700" font-family="Poppins">Image Generators</text>
+              <text x="466" y="278" fill="#4B5E7D" font-size="13" font-family="Inter">Diffusion &amp; visual models</text>
+              <text x="466" y="302" fill="#0891B2" font-size="12" font-weight="700" font-family="Inter">Not an LLM</text>
+
+              <rect x="444" y="340" width="236" height="104" rx="22" fill="#FFFFFF" stroke="#20C5E8" stroke-width="2" stroke-dasharray="6 4"/>
+              <text x="466" y="376" fill="#15233B" font-size="18" font-weight="700" font-family="Poppins">Audio &amp; Video AI</text>
+              <text x="466" y="400" fill="#4B5E7D" font-size="13" font-family="Inter">Speech, music &amp; motion models</text>
+              <text x="466" y="424" fill="#0891B2" font-size="12" font-weight="700" font-family="Inter">Not an LLM</text>
+            </svg>
+          </div>
+
+          <!-- Right: Relationship Hierarchy & Key Clarification -->
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <div class="card anim-3" style="padding:24px 26px;">
+              <div style="font-size:13px; font-weight:800; color:var(--primary); letter-spacing:0.06em; text-transform:uppercase;">Hierarchy Chain</div>
+              <div style="margin-top:14px; display:flex; flex-direction:column; gap:12px;">
+                <div style="padding:14px 18px; border-radius:14px; background:#EFF6FF; font-family:var(--font-head); font-size:19px; font-weight:700; color:#1769FF;">Artificial Intelligence</div>
+                <div style="text-align:center; font-size:18px; font-weight:800; color:var(--muted);">↓ includes</div>
+                <div style="padding:14px 18px; border-radius:14px; background:#E6FAFF; font-family:var(--font-head); font-size:19px; font-weight:700; color:#0891B2;">Generative AI</div>
+                <div style="text-align:center; font-size:18px; font-weight:800; color:var(--muted);">↓ includes</div>
+                <div style="padding:14px 18px; border-radius:14px; background:#F2EEFF; border:1.5px solid #8067FF; font-family:var(--font-head); font-size:19px; font-weight:700; color:#6346FA;">Language-Focused Models (LLMs)</div>
+              </div>
+            </div>
+
+            <div class="card anim-4" style="padding:24px 26px; background:linear-gradient(135deg,#15233B 0%,#1E3764 100%); color:#FFFFFF; border:none;">
+              <div style="font-size:12px; font-weight:800; letter-spacing:0.09em; text-transform:uppercase; color:#20C5E8;">Key Takeaway</div>
+              <p style="font-family:var(--font-head); font-size:21px; line-height:1.4; font-weight:700; margin-top:8px;">
+                LLMs are <span style="color:#7DF2FF;">one category</span> of models used in Generative AI — not all Generative AI.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 13: BEHIND THE SCENES OF CHATGPT
+    ========================================================== -->
+    <section class="slide" id="slide-13" data-chapter="Chapter 4 · How ChatGPT Works" data-title="Behind the Scenes of ChatGPT">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 4 · How ChatGPT Works</div>
+        <div class="slide-meta-right"><span class="slide-badge-num">13 / 21</span></div>
+      </div>
+
+      <h1 class="slide-title anim-1">BEHIND THE SCENES OF <span class="gradient-text">CHATGPT</span></h1>
+      <p class="anim-2" style="font-size:20px; color:var(--slate); margin-bottom:22px;">Every answer travels through a 6-step computational pipeline in milliseconds.</p>
+
+      <div class="slide-body">
+        <!-- Clean 2x3 Visual Flowchart -->
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; gap: 30px 44px; position:relative; height:540px;">
+
+          <!-- Step 1: User Prompt -->
+          <div class="card anim-2" style="padding:24px; display:flex; flex-direction:column; justify-content:space-between; border-left:6px solid #1769FF;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="tag tag-blue">STEP 01</span>
+              <span style="font-size:22px;">💬</span>
+            </div>
+            <div>
+              <h3 style="font-family:var(--font-head); font-size:23px; font-weight:800;">User Prompt</h3>
+              <p style="font-size:14px; color:var(--slate); margin-top:4px;">Your input text enters the model.</p>
+            </div>
+            <div style="padding:12px 14px; border-radius:12px; background:#F5F9FF; font-family:var(--font-mono); font-size:14px; color:var(--navy); border:1px solid rgba(23,105,255,0.16);">"Explain AI simply"</div>
+          </div>
+
+          <!-- Step 2: Tokenization -->
+          <div class="card anim-3" style="padding:24px; display:flex; flex-direction:column; justify-content:space-between; border-left:6px solid #20C5E8;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="tag tag-cyan">STEP 02</span>
+              <span style="font-size:22px;">🧩</span>
+            </div>
+            <div>
+              <h3 style="font-family:var(--font-head); font-size:23px; font-weight:800;">Tokenization</h3>
+              <p style="font-size:14px; color:var(--slate); margin-top:4px;">Text splits into small chunks (tokens).</p>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <span style="padding:6px 10px; border-radius:8px; background:#DBEAFE; color:#1D4ED8; font-family:var(--font-mono); font-size:13px; font-weight:700;">Explain</span>
+              <span style="padding:6px 10px; border-radius:8px; background:#CFFAFE; color:#0E7490; font-family:var(--font-mono); font-size:13px; font-weight:700;">AI</span>
+              <span style="padding:6px 10px; border-radius:8px; background:#EDE9FE; color:#6D28D9; font-family:var(--font-mono); font-size:13px; font-weight:700;">simply</span>
+            </div>
+          </div>
+
+          <!-- Step 3: Numerical Representations -->
+          <div class="card anim-4" style="padding:24px; display:flex; flex-direction:column; justify-content:space-between; border-left:6px solid #8067FF;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="tag tag-violet">STEP 03</span>
+              <span style="font-size:22px;">🔢</span>
+            </div>
+            <div>
+              <h3 style="font-family:var(--font-head); font-size:23px; font-weight:800;">Numerical Representations</h3>
+              <p style="font-size:14px; color:var(--slate); margin-top:4px;">Tokens convert into meaning vectors.</p>
+            </div>
+            <div style="padding:12px 14px; border-radius:12px; background:#15233B; font-family:var(--font-mono); font-size:13px; color:#7DF2FF;">[0.24, -0.81, 0.59, 0.12…]</div>
+          </div>
+
+          <!-- Step 4: Transformer & Attention -->
+          <div class="card anim-3" style="padding:24px; display:flex; flex-direction:column; justify-content:space-between; border-left:6px solid #1769FF;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="tag tag-blue">STEP 04</span>
+              <span style="font-size:22px;">🧠</span>
+            </div>
+            <div>
+              <h3 style="font-family:var(--font-head); font-size:23px; font-weight:800;">Transformer &amp; Attention</h3>
+              <p style="font-size:14px; color:var(--slate); margin-top:4px;">Model connects relationships across context.</p>
+            </div>
+            <svg width="100%" height="44" viewBox="0 0 340 44" fill="none">
+              <rect x="4" y="20" width="76" height="22" rx="6" fill="#EFF6FF"/><text x="42" y="35" fill="#1769FF" font-size="11" font-weight="700" text-anchor="middle" font-family="Inter">Explain</text>
+              <rect x="130" y="20" width="60" height="22" rx="6" fill="#E6FAFF"/><text x="160" y="35" fill="#0891B2" font-size="11" font-weight="700" text-anchor="middle" font-family="Inter">AI</text>
+              <rect x="242" y="20" width="84" height="22" rx="6" fill="#F2EEFF"/><text x="284" y="35" fill="#6346FA" font-size="11" font-weight="700" text-anchor="middle" font-family="Inter">simply</text>
+              <path d="M42 20 Q100 -2 160 20" stroke="#1769FF" stroke-width="2.2" fill="none"/>
+              <path d="M160 20 Q222 -2 284 20" stroke="#8067FF" stroke-width="2.2" fill="none"/>
+            </svg>
+          </div>
+
+          <!-- Step 5: Next-token Prediction -->
+          <div class="card anim-4" style="padding:24px; display:flex; flex-direction:column; justify-content:space-between; border-left:6px solid #20C5E8;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="tag tag-cyan">STEP 05</span>
+              <span style="font-size:22px;">📊</span>
+            </div>
+            <div>
+              <h3 style="font-family:var(--font-head); font-size:23px; font-weight:800;">Next-Token Prediction</h3>
+              <p style="font-size:14px; color:var(--slate); margin-top:4px;">Scores &amp; selects the likeliest next token.</p>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:5px;">
+              <div style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700;"><span style="width:42px;">"AI"</span><div style="flex:1;height:10px;border-radius:99px;background:#E2E8F0;"><div style="width:78%;height:100%;border-radius:99px;background:#1769FF;"></div></div><span>78%</span></div>
+              <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted);"><span style="width:42px;">"Think"</span><div style="flex:1;height:8px;border-radius:99px;background:#E2E8F0;"><div style="width:14%;height:100%;border-radius:99px;background:#94A3B8;"></div></div><span>14%</span></div>
+            </div>
+          </div>
+
+          <!-- Step 6: Generated Response -->
+          <div class="card anim-5" style="padding:24px; display:flex; flex-direction:column; justify-content:space-between; border-left:6px solid #10B981; background:linear-gradient(160deg,#FFFFFF 0%,#ECFDF5 100%);">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="tag tag-emerald">STEP 06</span>
+              <span style="font-size:22px;">✨</span>
+            </div>
+            <div>
+              <h3 style="font-family:var(--font-head); font-size:23px; font-weight:800;">Generated Response</h3>
+              <p style="font-size:14px; color:var(--slate); margin-top:4px;">Tokens stream back as readable text.</p>
+            </div>
+            <div style="padding:12px 14px; border-radius:12px; background:#FFFFFF; border:1px solid rgba(16,185,129,0.28); font-size:14px; font-weight:600; color:#065F46;">"AI is software that learns from data…"</div>
+          </div>
+
+          <!-- Directional Connector Arrows SVG overlay -->
+          <svg width="1464" height="540" viewBox="0 0 1464 540" style="position:absolute; inset:0; pointer-events:none;">
+            <defs>
+              <marker id="arrBlue" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#1769FF"/></marker>
+              <marker id="arrCyan" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#20C5E8"/></marker>
+              <marker id="arrViolet" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#8067FF"/></marker>
+              <marker id="arrGreen" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#10B981"/></marker>
+            </defs>
+            <!-- 1 -> 2 -->
+            <path d="M466 128 H496" stroke="#1769FF" stroke-width="3" marker-end="url(#arrBlue)"/>
+            <!-- 2 -> 3 -->
+            <path d="M970 128 H1000" stroke="#20C5E8" stroke-width="3" marker-end="url(#arrCyan)"/>
+            <!-- 3 -> 4 bridge -->
+            <path d="M1234 256 V270 H228 V280" stroke="#8067FF" stroke-width="2.5" stroke-dasharray="6 5" fill="none" marker-end="url(#arrViolet)"/>
+            <!-- 4 -> 5 -->
+            <path d="M466 414 H496" stroke="#1769FF" stroke-width="3" marker-end="url(#arrBlue)"/>
+            <!-- 5 -> 6 -->
+            <path d="M970 414 H1000" stroke="#10B981" stroke-width="3" marker-end="url(#arrGreen)"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 14: WHAT ARE TOKENS?
+    ========================================================== -->
+    <section class="slide" id="slide-14" data-chapter="Chapter 4 · How ChatGPT Works" data-title="What Are Tokens?">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 4 · How ChatGPT Works</div>
+        <div class="slide-meta-right">
+          <span class="tag tag-cyan">Interactive Token Visualizer</span>
+          <span class="slide-badge-num">14 / 21</span>
+        </div>
+      </div>
+
+      <h1 class="slide-title anim-1">WHAT ARE <span class="gradient-text">TOKENS?</span></h1>
+      <p class="anim-2" style="font-size:21px; color:var(--slate); margin-bottom:24px;">Models don't read whole sentences at once — they split text into small pieces called <strong>tokens</strong>.</p>
+
+      <div class="slide-body">
+        <div class="card anim-3" style="padding:36px 42px; display:flex; flex-direction:column; gap:28px; background:#FFFFFF;">
+
+          <!-- Mode switcher for live workshop -->
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-family:var(--font-head); font-size:15px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted);">Example Sentence</div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn-ghost active-pill" id="tok-btn-word" onclick="setTokenMode('word')">Standard Token Split (5 tokens)</button>
+              <button class="btn-ghost" id="tok-btn-sub" onclick="setTokenMode('sub')">Subword Split Example (7 tokens)</button>
+            </div>
+          </div>
+
+          <!-- Raw Sentence Banner -->
+          <div style="padding:20px 28px; border-radius:18px; background:#F5F9FF; border:1px solid rgba(23,105,255,0.14); text-align:center;">
+            <span style="font-family:var(--font-head); font-size:38px; font-weight:700; color:var(--navy); letter-spacing:-0.01em;">
+              "Artificial Intelligence is amazing!"
+            </span>
+          </div>
+
+          <!-- Colorful Highlighted Token Blocks -->
+          <div id="token-visual-container" style="display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:16px; padding:18px 0;">
+            <!-- Populated cleanly via JS (with default pre-rendered HTML too!) -->
+            <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+              <div style="padding:18px 26px; border-radius:16px; background:#DBEAFE; border:2px solid #1769FF; color:#1E40AF; font-family:var(--font-mono); font-size:32px; font-weight:700;">Artificial</div>
+              <span style="font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--muted);">Token 1</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+              <div style="padding:18px 26px; border-radius:16px; background:#CFFAFE; border:2px solid #20C5E8; color:#0E7490; font-family:var(--font-mono); font-size:32px; font-weight:700;"><span style="opacity:0.42">·</span>Intelligence</div>
+              <span style="font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--muted);">Token 2</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+              <div style="padding:18px 26px; border-radius:16px; background:#EDE9FE; border:2px solid #8067FF; color:#5B21B6; font-family:var(--font-mono); font-size:32px; font-weight:700;"><span style="opacity:0.42">·</span>is</div>
+              <span style="font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--muted);">Token 3</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+              <div style="padding:18px 26px; border-radius:16px; background:#D1FAE5; border:2px solid #10B981; color:#065F46; font-family:var(--font-mono); font-size:32px; font-weight:700;"><span style="opacity:0.42">·</span>amazing</div>
+              <span style="font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--muted);">Token 4</span>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+              <div style="padding:18px 24px; border-radius:16px; background:#FEF3C7; border:2px solid #F59E0B; color:#92400E; font-family:var(--font-mono); font-size:32px; font-weight:700;">!</div>
+              <span style="font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--muted);">Token 5</span>
+            </div>
+          </div>
+
+          <!-- Info Strip -->
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <div style="padding:16px 20px; border-radius:14px; background:#F8FAFC; border:1px solid #E2E8F0; font-size:16px; color:var(--slate);">
+              <strong style="color:var(--navy);">What can a token be?</strong> A common word, part of a word (subword), space (<code style="font-family:var(--font-mono); color:var(--primary);">·</code>), or punctuation mark.
+            </div>
+            <div style="padding:16px 20px; border-radius:14px; background:#EFF6FF; border:1px solid rgba(23,105,255,0.2); font-size:16px; color:var(--navy);">
+              <strong>Important:</strong> Actual tokenization depends on the specific model and its vocabulary.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 15: PREDICTING THE NEXT TOKEN
+    ========================================================== -->
+    <section class="slide" id="slide-15" data-chapter="Chapter 4 · How ChatGPT Works" data-title="Predicting the Next Token">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 4 · How ChatGPT Works</div>
+        <div class="slide-meta-right">
+          <span class="tag tag-blue">Interactive Live Demo</span>
+          <span class="slide-badge-num">15 / 21</span>
+        </div>
+      </div>
+
+      <h1 class="slide-title anim-1">PREDICTING THE <span class="gradient-text">NEXT TOKEN</span></h1>
+
+      <div class="slide-body">
+        <div style="display:grid; grid-template-columns: 1.25fr 0.75fr; gap: 30px; align-items: stretch; height: 500px;">
+
+          <!-- Left: Interactive Sentence Completion + Attention Arcs -->
+          <div class="card anim-2" style="padding:30px 32px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-family:var(--font-head); font-size:15px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted);">Context &amp; Attention Window</span>
+              <div style="display:flex; gap:10px;">
+                <button class="btn-interactive" id="next-tok-btn" onclick="stepTokenPrediction()">Predict Next Token →</button>
+                <button class="btn-ghost" onclick="resetTokenPrediction()">Reset</button>
+              </div>
+            </div>
+
+            <!-- Attention Curves + Current Context Tokens -->
+            <div style="padding:26px 24px; border-radius:20px; background:#F5F9FF; border:1px solid rgba(23,105,255,0.16); display:flex; flex-direction:column; gap:14px;">
+              <svg width="100%" height="58" viewBox="0 0 680 58" fill="none">
+                <path d="M125 56 Q340 4 565 56" stroke="#1769FF" stroke-width="3" fill="none" opacity="0.85"/>
+                <path d="M275 56 Q420 12 565 56" stroke="#20C5E8" stroke-width="3" fill="none" opacity="0.9"/>
+                <path d="M365 56 Q465 20 565 56" stroke="#8067FF" stroke-width="2" stroke-dasharray="4 4" fill="none"/>
+                <rect x="290" y="2" width="130" height="22" rx="11" fill="#1769FF"/>
+                <text x="355" y="17" fill="#fff" font-size="11" font-weight="700" text-anchor="middle" font-family="Inter">Attention Focus</text>
+              </svg>
+              <div id="pred-sentence" style="display:flex; flex-wrap:wrap; align-items:center; gap:10px; font-family:var(--font-head); font-size:28px; font-weight:700;">
+                <span style="padding:8px 14px; border-radius:12px; background:#fff; border:1px solid #CBD5E1;">The</span>
+                <span style="padding:8px 14px; border-radius:12px; background:#DBEAFE; border:1.5px solid #1769FF; color:#1E40AF;">sky</span>
+                <span style="padding:8px 14px; border-radius:12px; background:#fff; border:1px solid #CBD5E1;">at</span>
+                <span style="padding:8px 14px; border-radius:12px; background:#CFFAFE; border:1.5px solid #20C5E8; color:#0E7490;">sunset</span>
+                <span style="padding:8px 14px; border-radius:12px; background:#fff; border:1px solid #CBD5E1;">turns</span>
+                <span id="pred-blank" style="padding:8px 20px; border-radius:12px; background:linear-gradient(135deg,#1769FF,#8067FF); color:#fff;">?</span>
+              </div>
+            </div>
+
+            <!-- 3 Core Concepts Minimal Strip -->
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:14px;">
+              <div style="padding:14px 16px; border-radius:14px; background:#F8FAFC; border:1px solid #E2E8F0;">
+                <div style="font-family:var(--font-head); font-size:17px; font-weight:700; color:var(--primary);">1. Context</div>
+                <div style="font-size:13px; color:var(--slate); margin-top:3px;">All previous tokens guide what comes next.</div>
+              </div>
+              <div style="padding:14px 16px; border-radius:14px; background:#F8FAFC; border:1px solid #E2E8F0;">
+                <div style="font-family:var(--font-head); font-size:17px; font-weight:700; color:#0891B2;">2. Attention</div>
+                <div style="font-size:13px; color:var(--slate); margin-top:3px;">Weights key words like <em>"sky"</em> &amp; <em>"sunset"</em>.</div>
+              </div>
+              <div style="padding:14px 16px; border-radius:14px; background:#F8FAFC; border:1px solid #E2E8F0;">
+                <div style="font-family:var(--font-head); font-size:17px; font-weight:700; color:#6346FA;">3. Sequential</div>
+                <div style="font-size:13px; color:var(--slate); margin-top:3px;">Generates one token at a time, in a loop.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Probability Bar Chart -->
+          <div class="card anim-3" style="padding:30px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(170deg,#FFFFFF 0%,#F4F8FF 100%);">
+            <div>
+              <span class="tag tag-violet">PROBABILITY DISTRIBUTION</span>
+              <h2 style="font-family:var(--font-head); font-size:24px; font-weight:800; margin-top:10px;">Candidate Next Tokens</h2>
+              <p id="pred-step-label" style="font-size:14px; color:var(--slate); margin-top:4px;">Step 1: Model scores every possible token</p>
+            </div>
+
+            <div id="pred-bars" style="display:flex; flex-direction:column; gap:18px; margin:auto 0;">
+              <!-- Row 1 -->
+              <div>
+                <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:16px; font-weight:700; margin-bottom:6px;">
+                  <span style="color:var(--primary);">"orange" ✓</span><span>62%</span>
+                </div>
+                <div style="height:22px; border-radius:99px; background:#E2E8F0; overflow:hidden;">
+                  <div style="width:62%; height:100%; border-radius:99px; background:linear-gradient(90deg,#1769FF,#20C5E8); transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+              <!-- Row 2 -->
+              <div>
+                <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:16px; font-weight:600; margin-bottom:6px; color:var(--slate);">
+                  <span>"pink"</span><span>21%</span>
+                </div>
+                <div style="height:18px; border-radius:99px; background:#E2E8F0; overflow:hidden;">
+                  <div style="width:21%; height:100%; border-radius:99px; background:#8067FF; opacity:0.75; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+              <!-- Row 3 -->
+              <div>
+                <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:16px; font-weight:600; margin-bottom:6px; color:var(--slate);">
+                  <span>"dark"</span><span>11%</span>
+                </div>
+                <div style="height:18px; border-radius:99px; background:#E2E8F0; overflow:hidden;">
+                  <div style="width:11%; height:100%; border-radius:99px; background:#94A3B8; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+              <!-- Row 4 -->
+              <div>
+                <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:16px; font-weight:600; margin-bottom:6px; color:var(--muted);">
+                  <span>"purple"</span><span>6%</span>
+                </div>
+                <div style="height:18px; border-radius:99px; background:#E2E8F0; overflow:hidden;">
+                  <div style="width:6%; height:100%; border-radius:99px; background:#CBD5E1; transition:width 0.4s ease;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div style="padding:12px 16px; border-radius:12px; background:#FFFFFF; border:1px solid rgba(23,105,255,0.15); font-size:14px; font-weight:600; color:var(--navy); text-align:center;">
+              Pick token → Append to context → Repeat!
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 16: WHAT IS PROMPT ENGINEERING?
+    ========================================================== -->
+    <section class="slide" id="slide-16" data-chapter="Chapter 5 · Prompt Engineering" data-title="What Is Prompt Engineering?">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 5 · Prompt Engineering</div>
+        <div class="slide-meta-right"><span class="slide-badge-num">16 / 21</span></div>
+      </div>
+
+      <h1 class="slide-title anim-1">WHAT IS <span class="gradient-text">PROMPT ENGINEERING?</span></h1>
+
+      <div class="slide-body">
+        <div style="display:grid; grid-template-columns: 0.95fr 1.05fr; gap: 38px; align-items: center; height: 610px;">
+
+          <!-- Left Visual: Human + AI Assistant Illustration -->
+          <div class="card anim-2" style="padding:18px; height:520px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div style="flex:1; border-radius:18px; overflow:hidden; background:#F5F9FF;">
+              <img src="assets/human_ai_assistant.jpg" alt="Human collaborating with an AI assistant" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <div style="padding:14px 12px 4px; display:flex; align-items:center; justify-content:space-between;">
+              <span style="font-family:var(--font-head); font-size:15px; font-weight:700;">Better Input Instructions → Better AI Results</span>
+              <span class="tag tag-blue">Human-AI Collaboration</span>
+            </div>
+          </div>
+
+          <!-- Right Definition & Iterative Loop Visual -->
+          <div style="display:flex; flex-direction:column; gap:24px;">
+            <div class="card anim-2" style="padding:28px 32px; border-left:5px solid #1769FF;">
+              <div style="font-size:13px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:var(--primary); margin-bottom:8px;">Definition</div>
+              <p style="font-size:24px; line-height:1.42; font-weight:600; color:var(--navy);">
+                The practice of <strong>designing and refining instructions</strong> to obtain useful, accurate results from AI.
+              </p>
+            </div>
+
+            <!-- Visual Transformation: Idea -> Prompt -> Output -->
+            <div class="card anim-3" style="padding:24px 28px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+              <div style="text-align:center; flex:1; padding:14px; border-radius:14px; background:#F5F9FF;">
+                <div style="font-size:26px;">💡</div>
+                <div style="font-family:var(--font-head); font-size:17px; font-weight:700; margin-top:6px;">Your Goal</div>
+                <div style="font-size:12px; color:var(--slate);">What you need</div>
+              </div>
+              <span style="font-size:22px; font-weight:800; color:var(--primary);">→</span>
+              <div style="text-align:center; flex:1; padding:14px; border-radius:14px; background:linear-gradient(135deg,#1769FF,#20C5E8); color:#fff;">
+                <div style="font-size:26px;">✍️</div>
+                <div style="font-family:var(--font-head); font-size:17px; font-weight:700; margin-top:6px;">Clear Prompt</div>
+                <div style="font-size:12px; color:#E0F2FE;">Structured guidance</div>
+              </div>
+              <span style="font-size:22px; font-weight:800; color:var(--violet);">→</span>
+              <div style="text-align:center; flex:1; padding:14px; border-radius:14px; background:#ECFDF5; border:1px solid #10B981;">
+                <div style="font-size:26px;">🎯</div>
+                <div style="font-family:var(--font-head); font-size:17px; font-weight:700; color:#065F46; margin-top:6px;">Useful Result</div>
+                <div style="font-size:12px; color:#047857;">Actionable output</div>
+              </div>
+            </div>
+
+            <!-- 3 Core Principles -->
+            <div class="anim-4" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:14px;">
+              <div class="card-soft" style="padding:18px; text-align:center;">
+                <div style="font-family:var(--font-head); font-size:19px; font-weight:800; color:var(--primary);">Be Specific</div>
+                <div style="font-size:13px; color:var(--slate); margin-top:4px;">Clarity beats guessing</div>
+              </div>
+              <div class="card-soft" style="padding:18px; text-align:center;">
+                <div style="font-family:var(--font-head); font-size:19px; font-weight:800; color:#0891B2;">Give Context</div>
+                <div style="font-size:13px; color:var(--slate); margin-top:4px;">Share who &amp; why</div>
+              </div>
+              <div class="card-soft" style="padding:18px; text-align:center;">
+                <div style="font-family:var(--font-head); font-size:19px; font-weight:800; color:#6346FA;">Refine</div>
+                <div style="font-size:13px; color:var(--slate); margin-top:4px;">Iterate in conversation</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 17: ANATOMY OF A GOOD PROMPT
+    ========================================================== -->
+    <section class="slide" id="slide-17" data-chapter="Chapter 5 · Prompt Engineering" data-title="Anatomy of a Good Prompt">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 5 · Prompt Engineering</div>
+        <div class="slide-meta-right">
+          <span class="tag tag-violet">Click Any Part to Highlight</span>
+          <span class="slide-badge-num">17 / 21</span>
+        </div>
+      </div>
+
+      <h1 class="slide-title anim-1">ANATOMY OF A <span class="gradient-text">GOOD PROMPT</span></h1>
+
+      <div class="slide-body">
+        <!-- 5-Part Visual Blueprint -->
+        <div class="anim-2" style="display:grid; grid-template-columns: repeat(5, 1fr); gap: 18px; height: 345px; margin-bottom: 24px;">
+
+          <div class="card prompt-part-card" onclick="highlightPromptPart(1)" style="padding:24px 20px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #1769FF; cursor:pointer;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="width:40px;height:40px;border-radius:12px;background:#1769FF;color:#fff;font-family:var(--font-head);font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center;">1</span>
+              <span style="font-size:24px;">🎭</span>
+            </div>
+            <div>
+              <div style="font-family:var(--font-head); font-size:23px; font-weight:800; color:#1769FF;">ROLE</div>
+              <div style="font-size:16px; font-weight:600; color:var(--navy); margin-top:8px;">Who should AI act as?</div>
+            </div>
+            <div style="padding:10px 12px; border-radius:10px; background:#EFF6FF; font-size:13px; color:#1E40AF; font-weight:600;">"Act as a senior marketing strategist"</div>
+          </div>
+
+          <div class="card prompt-part-card" onclick="highlightPromptPart(2)" style="padding:24px 20px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #20C5E8; cursor:pointer;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="width:40px;height:40px;border-radius:12px;background:#20C5E8;color:#fff;font-family:var(--font-head);font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center;">2</span>
+              <span style="font-size:24px;">🌍</span>
+            </div>
+            <div>
+              <div style="font-family:var(--font-head); font-size:23px; font-weight:800; color:#0891B2;">CONTEXT</div>
+              <div style="font-size:16px; font-weight:600; color:var(--navy); margin-top:8px;">What does it need to know?</div>
+            </div>
+            <div style="padding:10px 12px; border-radius:10px; background:#ECFEFF; font-size:13px; color:#0E7490; font-weight:600;">"For an artisan café in Tunis"</div>
+          </div>
+
+          <div class="card prompt-part-card" onclick="highlightPromptPart(3)" style="padding:24px 20px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #8067FF; cursor:pointer;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="width:40px;height:40px;border-radius:12px;background:#8067FF;color:#fff;font-family:var(--font-head);font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center;">3</span>
+              <span style="font-size:24px;">⚡</span>
+            </div>
+            <div>
+              <div style="font-family:var(--font-head); font-size:23px; font-weight:800; color:#6346FA;">TASK</div>
+              <div style="font-size:16px; font-weight:600; color:var(--navy); margin-top:8px;">What should it do?</div>
+            </div>
+            <div style="padding:10px 12px; border-radius:10px; background:#F5F3FF; font-size:13px; color:#5B21B6; font-weight:600;">"Create a 2-week growth plan"</div>
+          </div>
+
+          <div class="card prompt-part-card" onclick="highlightPromptPart(4)" style="padding:24px 20px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #F59E0B; cursor:pointer;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="width:40px;height:40px;border-radius:12px;background:#F59E0B;color:#fff;font-family:var(--font-head);font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center;">4</span>
+              <span style="font-size:24px;">🚧</span>
+            </div>
+            <div>
+              <div style="font-family:var(--font-head); font-size:23px; font-weight:800; color:#B45309;">CONSTRAINTS</div>
+              <div style="font-size:16px; font-weight:600; color:var(--navy); margin-top:8px;">What limitations exist?</div>
+            </div>
+            <div style="padding:10px 12px; border-radius:10px; background:#FEF3C7; font-size:13px; color:#92400E; font-weight:600;">"Under 150 TND, organic content only"</div>
+          </div>
+
+          <div class="card prompt-part-card" onclick="highlightPromptPart(5)" style="padding:24px 20px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #10B981; cursor:pointer;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="width:40px;height:40px;border-radius:12px;background:#10B981;color:#fff;font-family:var(--font-head);font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center;">5</span>
+              <span style="font-size:24px;">📋</span>
+            </div>
+            <div>
+              <div style="font-family:var(--font-head); font-size:22px; font-weight:800; color:#059669;">OUTPUT FORMAT</div>
+              <div style="font-size:16px; font-weight:600; color:var(--navy); margin-top:8px;">How should the result look?</div>
+            </div>
+            <div style="padding:10px 12px; border-radius:10px; background:#ECFDF5; font-size:13px; color:#065F46; font-weight:600;">"Bullet list + 3 ready captions"</div>
+          </div>
+
+        </div>
+
+        <!-- Assembled Live Prompt Blueprint Strip -->
+        <div class="card anim-3" style="padding:26px 32px; background:#FFFFFF;">
+          <div style="font-size:13px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:10px;">Complete Formula in Action</div>
+          <div style="display:flex; flex-wrap:wrap; gap:10px; font-size:18px; line-height:1.4; color:var(--navy);">
+            <span id="pp-1" style="display:inline-flex; padding:6px 12px; border-radius:10px; background:#EFF6FF; color:#1769FF; font-weight:700;">Act as a senior marketing strategist.</span>
+            <span id="pp-2" style="display:inline-flex; padding:6px 12px; border-radius:10px; background:#ECFEFF; color:#0891B2; font-weight:700;">I run a small artisan café in Tunis targeting students.</span>
+            <span id="pp-3" style="display:inline-flex; padding:6px 12px; border-radius:10px; background:#F5F3FF; color:#6346FA; font-weight:700;">Create a 2-week customer growth plan.</span>
+            <span id="pp-4" style="display:inline-flex; padding:6px 12px; border-radius:10px; background:#FEF3C7; color:#B45309; font-weight:700;">Keep the budget under 150 TND using organic social media.</span>
+            <span id="pp-5" style="display:inline-flex; padding:6px 12px; border-radius:10px; background:#ECFDF5; color:#059669; font-weight:700;">Present it as a bullet list plus 3 Instagram captions.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 18: WEAK PROMPT VS GOOD PROMPT
+    ========================================================== -->
+    <section class="slide" id="slide-18" data-chapter="Chapter 5 · Prompt Engineering" data-title="Weak Prompt vs Good Prompt">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 5 · Prompt Engineering</div>
+        <div class="slide-meta-right"><span class="slide-badge-num">18 / 21</span></div>
+      </div>
+
+      <h1 class="slide-title anim-1">WEAK PROMPT <span class="gradient-text">VS</span> GOOD PROMPT</h1>
+
+      <div class="slide-body">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 34px; height: 590px;">
+
+          <!-- Left: WEAK PROMPT -->
+          <div class="card anim-2" style="padding:32px; border-top:6px solid #F43F5E; background:linear-gradient(170deg,#FFFFFF 0%,#FFF5F7 100%); display:flex; flex-direction:column; justify-content:space-between;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="tag tag-rose" style="font-size:14px; padding:8px 16px;">✕ WEAK PROMPT</span>
+              <span style="font-size:14px; font-weight:700; color:#E11D48;">No context · No constraints</span>
+            </div>
+
+            <!-- Weak Prompt Box -->
+            <div style="padding:32px 28px; border-radius:20px; background:#FFFFFF; border:2px dashed rgba(244,63,94,0.35); text-align:center;">
+              <div style="font-family:var(--font-head); font-size:32px; font-weight:700; color:var(--navy);">"Give me a business idea."</div>
+            </div>
+
+            <!-- Weak Result Preview -->
+            <div style="padding:24px; border-radius:18px; background:rgba(255,255,255,0.75); border:1px solid rgba(244,63,94,0.18); display:flex; flex-direction:column; gap:12px;">
+              <div style="font-size:13px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:#E11D48;">Typical AI Output</div>
+              <div style="font-size:17px; color:var(--slate); line-height:1.5;">
+                "1. Start an online store.<br>2. Open a restaurant.<br>3. Offer consulting services…"
+              </div>
+              <div style="display:flex; gap:8px; margin-top:6px;">
+                <span class="tag tag-rose">Too Generic</span>
+                <span class="tag tag-rose">Wrong Budget</span>
+                <span class="tag tag-rose">Not Actionable</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: GOOD PROMPT -->
+          <div class="card anim-3" style="padding:32px; border-top:6px solid #1769FF; background:linear-gradient(170deg,#FFFFFF 0%,#EEF5FF 100%); display:flex; flex-direction:column; justify-content:space-between;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span class="tag tag-emerald" style="font-size:14px; padding:8px 16px;">✓ GOOD PROMPT</span>
+              <span style="font-size:14px; font-weight:700; color:#1769FF;">Role · Context · Budget · Audience · Format</span>
+            </div>
+
+            <!-- Structured Good Prompt Box -->
+            <div style="padding:24px 26px; border-radius:20px; background:#FFFFFF; border:2px solid #1769FF; box-shadow:0 12px 30px rgba(23,105,255,0.10); font-size:19px; line-height:1.55; color:var(--navy);">
+              "<span style="color:#1769FF;font-weight:700;">Act as a startup advisor.</span>
+              <span style="color:#0891B2;font-weight:700;">I am a student in Tunisia</span>
+              launching a side project for <span style="color:#6346FA;font-weight:700;">university students</span>
+              with a <span style="color:#B45309;font-weight:700;">budget under 300 TND</span>.
+              Suggest 3 realistic business ideas in a <span style="color:#059669;font-weight:700;">comparison table with first launch steps</span>."
+            </div>
+
+            <!-- Good Result Preview -->
+            <div style="padding:24px; border-radius:18px; background:#FFFFFF; border:1px solid rgba(16,185,129,0.28); display:flex; flex-direction:column; gap:12px;">
+              <div style="font-size:13px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:#059669;">Targeted AI Output</div>
+              <div style="display:grid; grid-template-columns: 1.2fr 0.8fr 1.2fr; gap:8px; font-size:14px; padding:10px 12px; border-radius:10px; background:#F5F9FF; font-weight:600;">
+                <span>Idea</span><span>Cost</span><span>Day 1 Action</span>
+              </div>
+              <div style="display:grid; grid-template-columns: 1.2fr 0.8fr 1.2fr; gap:8px; font-size:14px; padding:4px 12px; color:var(--slate);">
+                <span>Campus CV Design</span><span>0 TND</span><span>Post 3 samples on IG</span>
+              </div>
+              <div style="display:flex; gap:8px; margin-top:4px;">
+                <span class="tag tag-emerald">Specific</span>
+                <span class="tag tag-blue">Budget-Matched</span>
+                <span class="tag tag-violet">Ready to Execute</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 19: YOUR FIRST AI CHALLENGE
+    ========================================================== -->
+    <section class="slide" id="slide-19" data-chapter="Chapter 6 · Hands-On Workshop" data-title="Your First AI Challenge">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 6 · Hands-On Workshop</div>
+        <div class="slide-meta-right">
+          <span class="tag tag-emerald">Live Hands-On Scenario</span>
+          <span class="slide-badge-num">19 / 21</span>
+        </div>
+      </div>
+
+      <h1 class="slide-title anim-1">YOUR FIRST <span class="gradient-text">AI CHALLENGE</span></h1>
+
+      <div class="slide-body">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 38px; align-items: center; height: 610px;">
+
+          <!-- Left Visual: Tunisia Small Business Illustration -->
+          <div class="card anim-2" style="padding:18px; height:530px; display:flex; flex-direction:column; justify-content:space-between;">
+            <div style="flex:1; border-radius:18px; overflow:hidden; background:#F5F9FF;">
+              <img src="assets/tunisia_small_business.jpg" alt="Small Business in Tunisia" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <div style="padding:14px 12px 4px; display:flex; align-items:center; justify-content:space-between;">
+              <span style="font-family:var(--font-head); font-size:16px; font-weight:700;">Local Tunisian Business Transformation</span>
+              <span class="tag tag-cyan">Real-World Brief</span>
+            </div>
+          </div>
+
+          <!-- Right Scenario Breakdown -->
+          <div style="display:flex; flex-direction:column; gap:22px;">
+            <div class="card anim-2" style="padding:28px 32px; border-left:6px solid #1769FF; background:linear-gradient(155deg,#FFFFFF 0%,#EEF5FF 100%);">
+              <div style="font-size:13px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:var(--primary); margin-bottom:10px;">The Challenge Scenario</div>
+              <p style="font-family:var(--font-head); font-size:26px; line-height:1.38; font-weight:700; color:var(--navy);">
+                A small business in Tunisia wants more customers, but has a <span style="color:var(--primary);">limited marketing budget</span> and a <span style="color:var(--violet);">weak social media presence</span>.
+              </p>
+            </div>
+
+            <!-- 3 Visual Challenge Constraints -->
+            <div class="anim-3" style="display:flex; flex-direction:column; gap:14px;">
+              <div class="card" style="padding:18px 22px; display:flex; align-items:center; gap:16px;">
+                <div style="width:48px;height:48px;border-radius:14px;background:var(--primary-soft);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">📍</div>
+                <div>
+                  <div style="font-family:var(--font-head); font-size:19px; font-weight:700;">Local Market Context</div>
+                  <div style="font-size:14px; color:var(--slate);">Pick a business you love (café, craft shop, bakery, gym, boutique…)</div>
+                </div>
+              </div>
+
+              <div class="card" style="padding:18px 22px; display:flex; align-items:center; gap:16px;">
+                <div style="width:48px;height:48px;border-radius:14px;background:var(--cyan-soft);color:#0891B2;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">💸</div>
+                <div>
+                  <div style="font-family:var(--font-head); font-size:19px; font-weight:700;">Limited Marketing Budget</div>
+                  <div style="font-size:14px; color:var(--slate);">Rely on smart, creative, low-cost organic ideas</div>
+                </div>
+              </div>
+
+              <div class="card" style="padding:18px 22px; display:flex; align-items:center; gap:16px;">
+                <div style="width:48px;height:48px;border-radius:14px;background:var(--violet-soft);color:#6346FA;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">📱</div>
+                <div>
+                  <div style="font-family:var(--font-head); font-size:19px; font-weight:700;">Weak Social Media Presence</div>
+                  <div style="font-size:14px; color:var(--slate);">Turn AI into your digital marketing co-pilot</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 20: BUILD YOUR SOLUTION
+    ========================================================== -->
+    <section class="slide" id="slide-20" data-chapter="Chapter 6 · Hands-On Workshop" data-title="Your Mission: Build With AI">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Chapter 6 · Hands-On Workshop</div>
+        <div class="slide-meta-right">
+          <button class="btn-ghost" onclick="copyStarterPrompt()">📋 Copy Starter Prompt</button>
+          <button class="btn-interactive" onclick="startChallengeTimer()">⏱ Start 15:00 Timer</button>
+          <span class="slide-badge-num">20 / 21</span>
+        </div>
+      </div>
+
+      <h1 class="slide-title anim-1">YOUR MISSION: <span class="gradient-text">BUILD WITH AI</span></h1>
+
+      <div class="slide-body">
+        <!-- 5 Action-Oriented Steps -->
+        <div class="anim-2" style="display:grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-bottom: 28px;">
+
+          <div class="card" style="padding:24px 20px; height:245px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #1769FF;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-family:var(--font-head); font-size:28px; font-weight:800; color:#1769FF;">01</span>
+              <span style="font-size:26px;">🔍</span>
+            </div>
+            <div>
+              <h3 style="font-family:var(--font-head); font-size:21px; font-weight:800; min-height:56px;">Understand the problem</h3>
+              <p style="font-size:14px; color:var(--slate); margin-top:6px;">Define target customers &amp; main gap.</p>
+            </div>
+          </div>
+
+          <div class="card" style="padding:24px 20px; height:245px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #20C5E8;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-family:var(--font-head); font-size:28px; font-weight:800; color:#0891B2;">02</span>
+              <span style="font-size:26px;">✍️</span>
+            </div>
+            <div>
+              <h3 style="font-family:var(--font-head); font-size:21px; font-weight:800; min-height:56px;">Write a prompt</h3>
+              <p style="font-size:14px; color:var(--slate); margin-top:6px;">Use Role, Context, Task, Constraints, Format.</p>
+            </div>
+          </div>
+
+          <div class="card" style="padding:24px 20px; height:245px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #8067FF;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-family:var(--font-head); font-size:28px; font-weight:800; color:#6346FA;">03</span>
+              <span style="font-size:26px;">🧭</span>
+            </div>
+            <div>
+              <h3 style="font-family:var(--font-head); font-size:21px; font-weight:800; min-height:56px;">Generate a strategy</h3>
+              <p style="font-size:14px; color:var(--slate); margin-top:6px;">Build a practical low-budget plan.</p>
+            </div>
+          </div>
+
+          <div class="card" style="padding:24px 20px; height:245px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #1769FF;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-family:var(--font-head); font-size:28px; font-weight:800; color:#1769FF;">04</span>
+              <span style="font-size:26px;">📣</span>
+            </div>
+            <div>
+              <h3 style="font-family:var(--font-head); font-size:21px; font-weight:800; min-height:56px;">Create social media posts</h3>
+              <p style="font-size:14px; color:var(--slate); margin-top:6px;">Draft engaging captions &amp; visual ideas.</p>
+            </div>
+          </div>
+
+          <div class="card" style="padding:24px 20px; height:245px; display:flex; flex-direction:column; justify-content:space-between; border-top:6px solid #10B981;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-family:var(--font-head); font-size:28px; font-weight:800; color:#059669;">05</span>
+              <span style="font-size:26px;">🔄</span>
+            </div>
+            <div>
+              <h3 style="font-family:var(--font-head); font-size:21px; font-weight:800; min-height:56px;">Evaluate and improve</h3>
+              <p style="font-size:14px; color:var(--slate); margin-top:6px;">Critique output &amp; refine with follow-ups.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Deliverables Card -->
+        <div class="card anim-3" style="padding:28px 34px; background:linear-gradient(135deg,#15233B 0%,#1E3A6D 100%); color:#FFFFFF; border:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+            <div>
+              <span style="font-size:12px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#20C5E8;">Team Deliverables</span>
+              <h2 style="font-family:var(--font-head); font-size:26px; font-weight:800; margin-top:2px;">What Your Team Will Present</h2>
+            </div>
+            <span style="padding:8px 16px; border-radius:99px; background:rgba(255,255,255,0.12); font-size:14px; font-weight:700; color:#7DF2FF;">3 Concrete Outputs</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 22px;">
+            <div style="padding:20px 24px; border-radius:16px; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.18); display:flex; align-items:center; gap:18px;">
+              <div style="width:54px;height:54px;border-radius:14px;background:#1769FF;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:26px;font-weight:800;flex-shrink:0;">1</div>
+              <div>
+                <div style="font-family:var(--font-head); font-size:22px; font-weight:800;">One Strategy</div>
+                <div style="font-size:14px; color:#CBD5E1;">Focused low-budget customer plan</div>
+              </div>
+            </div>
+
+            <div style="padding:20px 24px; border-radius:16px; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.18); display:flex; align-items:center; gap:18px;">
+              <div style="width:54px;height:54px;border-radius:14px;background:#20C5E8;color:#0F172A;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:26px;font-weight:800;flex-shrink:0;">3</div>
+              <div>
+                <div style="font-family:var(--font-head); font-size:22px; font-weight:800;">Three Posts</div>
+                <div style="font-size:14px; color:#CBD5E1;">Ready-to-publish social content</div>
+              </div>
+            </div>
+
+            <div style="padding:20px 24px; border-radius:16px; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.18); display:flex; align-items:center; gap:18px;">
+              <div style="width:54px;height:54px;border-radius:14px;background:#8067FF;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:26px;font-weight:800;flex-shrink:0;">1</div>
+              <div>
+                <div style="font-family:var(--font-head); font-size:22px; font-weight:800;">One Recommendation</div>
+                <div style="font-size:14px; color:#CBD5E1;">Bonus growth tip or next experiment</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SLIDE 21: CLOSING
+    ========================================================== -->
+    <section class="slide" id="slide-21" data-chapter="Closing" data-title="From Learning to Applying">
+      <div class="slide-header">
+        <div class="chapter-pill"><span class="chapter-dot"></span>Wrap-Up &amp; Takeaways</div>
+        <div class="slide-meta-right"><span class="slide-badge-num">21 / 21</span></div>
+      </div>
+
+      <h1 class="slide-title anim-1" style="text-align:center; font-size:52px;">FROM LEARNING TO <span class="gradient-text">APPLYING</span></h1>
+
+      <div class="slide-body" style="justify-content:center; gap:34px; padding-top:8px;">
+        <!-- 3 Key Takeaways -->
+        <div class="anim-2" style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 28px;">
+
+          <div class="card" style="padding:30px 28px; text-align:center; border-top:6px solid #1769FF;">
+            <div style="width:68px;height:68px;margin:0 auto 16px;border-radius:20px;background:var(--primary-soft);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:32px;">🧠</div>
+            <h2 style="font-family:var(--font-head); font-size:26px; font-weight:800;">Understand AI.</h2>
+            <p style="font-size:16px; color:var(--slate); margin-top:8px;">Know how data, models, tokens &amp; predictions work.</p>
+          </div>
+
+          <div class="card" style="padding:30px 28px; text-align:center; border-top:6px solid #20C5E8;">
+            <div style="width:68px;height:68px;margin:0 auto 16px;border-radius:20px;background:var(--cyan-soft);color:#0891B2;display:flex;align-items:center;justify-content:center;font-size:32px;">🎯</div>
+            <h2 style="font-family:var(--font-head); font-size:26px; font-weight:800;">Use AI intelligently.</h2>
+            <p style="font-size:16px; color:var(--slate); margin-top:8px;">Design clear prompts, iterate &amp; always verify critically.</p>
+          </div>
+
+          <div class="card" style="padding:30px 28px; text-align:center; border-top:6px solid #8067FF;">
+            <div style="width:68px;height:68px;margin:0 auto 16px;border-radius:20px;background:var(--violet-soft);color:#6346FA;display:flex;align-items:center;justify-content:center;font-size:32px;">🚀</div>
+            <h2 style="font-family:var(--font-head); font-size:26px; font-weight:800;">Solve real problems.</h2>
+            <p style="font-size:16px; color:var(--slate); margin-top:8px;">Turn AI into practical value for people and businesses.</p>
+          </div>
+
+        </div>
+
+        <!-- Hero Final Statement -->
+        <div class="card anim-3" style="padding:30px 44px; text-align:center; background:linear-gradient(135deg,#1769FF 0%,#20C5E8 52%,#8067FF 100%); color:#FFFFFF; border:none; box-shadow:0 22px 50px -12px rgba(23,105,255,0.38);">
+          <p style="font-family:var(--font-head); font-size:30px; font-weight:700; line-height:1.32;">
+            "AI is not magic. The real power is knowing how to use it."
+          </p>
+        </div>
+
+        <!-- Thank You Footer -->
+        <div class="anim-4" style="text-align:center; display:flex; flex-direction:column; align-items:center; gap:8px;">
+          <div style="font-family:var(--font-head); font-size:52px; font-weight:800; letter-spacing:0.02em; color:var(--navy);">THANK YOU!</div>
+          <div style="display:flex; align-items:center; gap:18px; font-family:var(--font-head); font-size:22px; font-weight:700;">
+            <span style="color:var(--primary);">Learn.</span>
+            <span style="color:var(--muted);">·</span>
+            <span style="color:#0891B2;">Explore.</span>
+            <span style="color:var(--muted);">·</span>
+            <span style="color:#6346FA;">Build.</span>
+          </div>
+          <div style="font-size:15px; font-weight:600; color:var(--muted); margin-top:4px;">INTRO TO AI Workshop · Presented by Seif Ayari</div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /#stage -->
+</div><!-- /#viewport -->
+
+<!-- Floating Presenter Control HUD -->
+<div id="hud">
+  <button class="hud-btn" onclick="prevSlide()" title="Previous Slide [←]">← Prev</button>
+  <span id="hud-counter">01 / 21</span>
+  <div id="hud-progress-wrap"><div id="hud-progress-bar"></div></div>
+  <button class="hud-btn primary" onclick="nextSlide()" title="Next Slide [→ / Space]">Next →</button>
+  <div class="hud-sep"></div>
+  <button class="hud-btn" onclick="toggleOverview()" title="All Slides [G]">Grid</button>
+  <button class="hud-btn" onclick="toggleNotes()" title="Speaker Notes [N]">Notes</button>
+  <span id="workshop-timer-pill" onclick="toggleTimerRunning()" title="Click to Start/Pause Timer [T]">⏱ <span id="timer-display">15:00</span></span>
+  <button class="hud-btn" onclick="toggleFullscreen()" title="Fullscreen [F]">⛶</button>
+</div>
+
+<!-- Speaker Notes Drawer -->
+<aside id="notes-drawer">
+  <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:16px; border-bottom:1px solid rgba(23,105,255,0.14);">
+    <div>
+      <div style="font-size:11px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:var(--primary);">Presenter Notes</div>
+      <div id="notes-title" style="font-family:var(--font-head); font-size:19px; font-weight:700; margin-top:2px;">Slide 1</div>
+    </div>
+    <button class="btn-ghost" onclick="toggleNotes()">✕ Close</button>
+  </div>
+  <div id="notes-timing" class="tag tag-cyan" style="width:fit-content; margin-top:14px;">Duration: ~3 min</div>
+  <div id="notes-body" style="margin-top:16px; font-size:15px; line-height:1.68; color:var(--navy); overflow-y:auto; flex:1;"></div>
+  <div style="padding-top:14px; border-top:1px solid rgba(21,35,59,0.08); font-size:12px; color:var(--muted);">
+    Shortcuts: <strong>←/→</strong> Navigate · <strong>G</strong> Grid · <strong>N</strong> Notes · <strong>F</strong> Fullscreen · <strong>H</strong> Hide Bar
+  </div>
+</aside>
+
+<!-- Slide Overview Grid Modal -->
+<div id="overview-modal" onclick="if(event.target===this) toggleOverview()">
+  <div class="overview-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <h2 style="font-family:var(--font-head); font-size:24px; font-weight:800;">Workshop Navigator — 21 Slides</h2>
+        <p style="font-size:14px; color:var(--slate);">Click any slide card to jump immediately.</p>
+      </div>
+      <button class="btn-ghost" onclick="toggleOverview()">✕ Close [Esc]</button>
+    </div>
+    <div class="overview-grid" id="overview-grid"></div>
+  </div>
+</div>
+
+<div id="toast">Copied to clipboard!</div>
+
+<script>
+  const TOTAL_SLIDES = 21;
+  let currentSlide = 1;
+
+  // Responsive 16:9 stage auto-scaling
+  function scaleStage() {
+    const stage = document.getElementById('stage');
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const pad = document.fullscreenElement ? 0 : 28;
+    const scale = Math.min((vw - pad) / 1600, (vh - pad) / 900);
+    stage.style.transform = `scale(${scale})`;
+  }
+  window.addEventListener('resize', scaleStage);
+  document.addEventListener('fullscreenchange', scaleStage);
+  scaleStage();
+
+  // Populate Neural Network SVG on Slide 9 cleanly
+  (function buildNeuralNet() {
+    const layers = [4, 6, 6, 4, 3];
+    const xCoords = [100, 270, 440, 610, 780];
+    const colors = ['#1769FF', '#20C5E8', '#0891B2', '#6346FA', '#8067FF'];
+    const edgesG = document.getElementById('nn-edges');
+    const nodesG = document.getElementById('nn-nodes');
+    if (!edgesG || !nodesG) return;
+
+    const coords = layers.map((count, li) => {
+      const span = 270;
+      const top = 175 - ((count - 1) * (span / Math.max(count - 1, 1))) / 2;
+      const step = count > 1 ? span / (count - 1) : 0;
+      // Clean balanced vertical spread
+      const gap = count === 6 ? 48 : count === 4 ? 66 : 78;
+      const startY = 172 - ((count - 1) * gap) / 2;
+      return Array.from({ length: count }, (_, ni) => ({
+        x: xCoords[li],
+        y: startY + ni * gap
+      }));
+    });
+
+    for (let li = 0; li < coords.length - 1; li++) {
+      coords[li].forEach((a) => {
+        coords[li + 1].forEach((b) => {
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', a.x);
+          line.setAttribute('y1', a.y);
+          line.setAttribute('x2', b.x);
+          line.setAttribute('y2', b.y);
+          line.setAttribute('stroke', 'url(#synapseGrad)');
+          line.setAttribute('stroke-width', '1.6');
+          edgesG.appendChild(line);
+        });
+      });
+    }
+
+    coords.forEach((layer, li) => {
+      layer.forEach((pt) => {
+        const outer = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        outer.setAttribute('cx', pt.x);
+        outer.setAttribute('cy', pt.y);
+        outer.setAttribute('r', '15');
+        outer.setAttribute('fill', '#FFFFFF');
+        outer.setAttribute('stroke', colors[li]);
+        outer.setAttribute('stroke-width', '3.5');
+        nodesG.appendChild(outer);
+
+        const inner = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        inner.setAttribute('cx', pt.x);
+        inner.setAttribute('cy', pt.y);
+        inner.setAttribute('r', '6');
+        inner.setAttribute('fill', colors[li]);
+        nodesG.appendChild(inner);
+      });
+    });
+  })();
+
+  // Speaker Notes for a 2-Hour Interactive Workshop
+  const speakerNotes = {
+    1: { time: "0:00 – 0:04 (4 min)", text: "Welcome everyone to 'Intro to AI: Understand. Explore. Apply.' Introduce yourself (Seif Ayari) and set the tone: this is not an academic math lecture — over the next 2 hours, we will demystify how AI actually works, experiment live, and finish with a real hands-on team challenge." },
+    2: { time: "0:04 – 0:10 (6 min)", text: "Interactive opener! Ask the room: 'Raise your hand if you unlocked your phone with your face this morning, checked Google Maps, scrolled Netflix, asked ChatGPT a question, or saw shopping recommendations.' Point out that AI is already invisible infrastructure around us." },
+    3: { time: "0:10 – 0:16 (6 min)", text: "Give the clean definition of AI. Walk around the 6 core capabilities on the visual diagram: Learning, Recognition, Prediction, Language, Reasoning, Generation. Emphasize that modern AI systems combine several of these." },
+    4: { time: "0:16 – 0:23 (7 min)", text: "Highlight the key distinction: people often confuse WHAT AI can do (Capability) with HOW it is built (Technology). Left side: Narrow AI (all AI today!), AGI (human-level goal), ASI (hypothetical). Right side: Rule-based -> ML -> Deep Learning -> Generative AI." },
+    5: { time: "0:23 – 0:28 (5 min)", text: "Transition to Chapter 2: Machine Learning. Walk through the 4-node flow: Data enters, the learning algorithm spots patterns, outputs a trained Model, and that Model makes Predictions on new unseen cases." },
+    6: { time: "0:28 – 0:34 (6 min)", text: "Explain the 4-step ML workflow: 1. Collect clean data, 2. Train the model, 3. Evaluate on unseen test data, 4. Deploy for predictions — plus note the feedback arrow: if accuracy isn't good enough, we tune and iterate." },
+    7: { time: "0:34 – 0:42 (8 min)", text: "Contrast the 3 big paradigms visually. Supervised = learning with labeled answers (spam vs safe). Unsupervised = finding hidden clusters with no labels (customer segments). Reinforcement = trial-and-error guided by rewards (game bots)." },
+    8: { time: "0:42 – 0:49 (7 min)", text: "Aha moment slide! In traditional programming, humans write exact rules (IF 'free prize' THEN spam). In Machine Learning, we feed data + expected answers, and the computer discovers the rules itself — allowing it to adapt when spammers change tactics." },
+    9: { time: "0:49 – 0:55 (6 min)", text: "Introduce Deep Learning: neural networks stacked with multiple hidden layers. Each layer learns progressively richer patterns (edges -> shapes -> objects). Highlight the three huge breakthroughs: vision, speech, and language." },
+    10: { time: "0:55 – 1:01 (6 min)", text: "Chapter 3! Generative AI marks the shift from recognizing/classifying data to CREATING original content. Point out the 4 modalities: Text, Images (mention the sample image was generated by AI!), Audio, and Video." },
+    11: { time: "1:01 – 1:07 (6 min)", text: "Explain Large Language Models: trained on huge text datasets to process and generate language. Reference ChatGPT, Gemini, and Claude — emphasize that despite different companies, they share the same core LLM concept." },
+    12: { time: "1:07 – 1:12 (5 min)", text: "Clarify the Venn relationship! Artificial Intelligence is the umbrella -> Generative AI sits inside it -> LLMs are ONE category inside Generative AI focused on language (distinct from image, audio, and video generators)." },
+    13: { time: "1:12 – 1:20 (8 min)", text: "Chapter 4: Demystifying ChatGPT. Walk through the 6 steps cleanly: Prompt -> Tokenization -> Numbers/Vectors -> Transformer & Attention -> Next-Token Prediction -> Generated Response." },
+    14: { time: "1:20 – 1:26 (6 min)", text: "Use the interactive toggle on screen! Show 'Artificial Intelligence is amazing!' broken into colored token blocks. Click 'Subword Split Example' to show how models can split words/spaces differently depending on their tokenizer." },
+    15: { time: "1:26 – 1:34 (8 min)", text: "Click 'Predict Next Token' live with the audience! Ask them what word completes 'The sky at sunset turns ___'. Show how context + attention assign probabilities (orange 62%) and generate answers one token at a time." },
+    16: { time: "1:34 – 1:39 (5 min)", text: "Chapter 5: Prompt Engineering. Now that we understand how LLMs predict tokens, prompt engineering is simply steering those probabilities through clear, well-structured instructions." },
+    17: { time: "1:39 – 1:46 (7 min)", text: "Walk through the 5-part formula: Role, Context, Task, Constraints, Output Format. Click each card on the slide to highlight how each piece builds the final prompt at the bottom." },
+    18: { time: "1:46 – 1:51 (5 min)", text: "Show the dramatic contrast between 'Give me a business idea' and a structured 5-part prompt tailored to Tunisia, budget, audience, and table format. Ask the room why the right output is 10x more useful." },
+    19: { time: "1:51 – 1:54 (3 min)", text: "Chapter 6: Launch the hands-on workshop! Introduce the Tunisian small business scenario (limited marketing budget, weak social media presence). Form quick teams of 2–4." },
+    20: { time: "1:54 – 2:12 (18 min)", text: "Click 'Start 15:00 Timer' right on the slide and optionally 'Copy Starter Prompt' if teams need a boost. Walk around helping teams iterate through the 5 steps and prepare 1 strategy, 3 posts, and 1 recommendation." },
+    21: { time: "2:12 – 2:20 (Wrap-up)", text: "Let 2–3 teams share their best AI-generated ideas, then close with the 3 takeaways and final quote: 'AI is not magic. The real power is knowing how to use it.' Thank everyone!" }
+  };
+
+  function updateUI() {
+    document.querySelectorAll('.slide').forEach((s, idx) => {
+      if (idx + 1 === currentSlide) s.classList.add('active');
+      else s.classList.remove('active');
+    });
+
+    const numStr = String(currentSlide).padStart(2, '0');
+    document.getElementById('hud-counter').textContent = `${numStr} / ${TOTAL_SLIDES}`;
+    document.getElementById('hud-progress-bar').style.width = `${(currentSlide / TOTAL_SLIDES) * 100}%`;
+
+    const activeEl = document.getElementById(`slide-${currentSlide}`);
+    const title = activeEl ? activeEl.dataset.title : `Slide ${currentSlide}`;
+    document.getElementById('notes-title').textContent = `${numStr}. ${title}`;
+    const noteObj = speakerNotes[currentSlide] || { time: "", text: "" };
+    document.getElementById('notes-timing').textContent = `Workshop Pacing: ${noteObj.time}`;
+    document.getElementById('notes-body').textContent = noteObj.text;
+
+    buildOverviewGrid();
+  }
+
+  function nextSlide() { if (currentSlide < TOTAL_SLIDES) { currentSlide++; updateUI(); } }
+  function prevSlide() { if (currentSlide > 1) { currentSlide--; updateUI(); } }
+  function goToSlide(n) { if (n >= 1 && n <= TOTAL_SLIDES) { currentSlide = n; updateUI(); } }
+
+  function toggleNotes() { document.getElementById('notes-drawer').classList.toggle('open'); }
+  function toggleOverview() { document.getElementById('overview-modal').classList.toggle('open'); }
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+    else document.exitFullscreen();
+  }
+
+  function buildOverviewGrid() {
+    const grid = document.getElementById('overview-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    document.querySelectorAll('.slide').forEach((s, idx) => {
+      const n = idx + 1;
+      const card = document.createElement('button');
+      card.className = 'ov-card' + (n === currentSlide ? ' current' : '');
+      card.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-family:var(--font-mono);font-size:12px;font-weight:800;color:#1769FF;">SLIDE ${String(n).padStart(2,'0')}</span>
+          <span style="font-size:11px;color:#7C8FA9;font-weight:600;">${s.dataset.chapter || ''}</span>
+        </div>
+        <div style="font-family:var(--font-head);font-size:15px;font-weight:700;color:#15233B;">${s.dataset.title || ''}</div>
+      `;
+      card.onclick = () => { goToSlide(n); toggleOverview(); };
+      grid.appendChild(card);
+    });
+  }
+
+  // Slide 14 Interactive Token Mode
+  function setTokenMode(mode) {
+    const container = document.getElementById('token-visual-container');
+    document.getElementById('tok-btn-word').classList.toggle('active-pill', mode === 'word');
+    document.getElementById('tok-btn-sub').classList.toggle('active-pill', mode === 'sub');
+
+    const wordTokens = [
+      { txt: 'Artificial', bg: '#DBEAFE', bd: '#1769FF', fg: '#1E40AF' },
+      { txt: '<span style="opacity:0.42">·</span>Intelligence', bg: '#CFFAFE', bd: '#20C5E8', fg: '#0E7490' },
+      { txt: '<span style="opacity:0.42">·</span>is', bg: '#EDE9FE', bd: '#8067FF', fg: '#5B21B6' },
+      { txt: '<span style="opacity:0.42">·</span>amazing', bg: '#D1FAE5', bd: '#10B981', fg: '#065F46' },
+      { txt: '!', bg: '#FEF3C7', bd: '#F59E0B', fg: '#92400E' }
+    ];
+    const subTokens = [
+      { txt: 'Art', bg: '#DBEAFE', bd: '#1769FF', fg: '#1E40AF' },
+      { txt: 'ificial', bg: '#E0E7FF', bd: '#4F46E5', fg: '#3730A3' },
+      { txt: '<span style="opacity:0.42">·</span>Intel', bg: '#CFFAFE', bd: '#20C5E8', fg: '#0E7490' },
+      { txt: 'ligence', bg: '#E0F2FE', bd: '#0284C7', fg: '#075985' },
+      { txt: '<span style="opacity:0.42">·</span>is', bg: '#EDE9FE', bd: '#8067FF', fg: '#5B21B6' },
+      { txt: '<span style="opacity:0.42">·</span>amazing', bg: '#D1FAE5', bd: '#10B981', fg: '#065F46' },
+      { txt: '!', bg: '#FEF3C7', bd: '#F59E0B', fg: '#92400E' }
+    ];
+
+    const list = mode === 'word' ? wordTokens : subTokens;
+    container.innerHTML = list.map((t, i) => `
+      <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+        <div style="padding:${mode==='sub' ? '16px 20px' : '18px 26px'}; border-radius:16px; background:${t.bg}; border:2px solid ${t.bd}; color:${t.fg}; font-family:var(--font-mono); font-size:${mode==='sub' ? '26px' : '32px'}; font-weight:700;">${t.txt}</div>
+        <span style="font-family:var(--font-mono); font-size:13px; font-weight:700; color:var(--muted);">Token ${i+1}</span>
+      </div>
+    `).join('');
+  }
+
+  // Slide 15 Interactive Next-Token Stepper
+  const predSteps = [
+    {
+      added: [],
+      label: "Step 1: Model scores every possible next token",
+      bars: [
+        { w: '"orange" ✓', p: 62, c: 'linear-gradient(90deg,#1769FF,#20C5E8)', top: true },
+        { w: '"pink"', p: 21, c: '#8067FF' },
+        { w: '"dark"', p: 11, c: '#94A3B8' },
+        { w: '"purple"', p: 6, c: '#CBD5E1' }
+      ]
+    },
+    {
+      added: ['orange'],
+      label: "Step 2: 'orange' appended — predicting the next token",
+      bars: [
+        { w: '"and" ✓', p: 54, c: 'linear-gradient(90deg,#1769FF,#20C5E8)', top: true },
+        { w: '"."', p: 24, c: '#8067FF' },
+        { w: '"with"', p: 13, c: '#94A3B8' },
+        { w: '"bright"', p: 9, c: '#CBD5E1' }
+      ]
+    },
+    {
+      added: ['orange', 'and'],
+      label: "Step 3: 'and' appended — continuing sequentially",
+      bars: [
+        { w: '"gold" ✓', p: 48, c: 'linear-gradient(90deg,#1769FF,#20C5E8)', top: true },
+        { w: '"crimson"', p: 26, c: '#8067FF' },
+        { w: '"pink"', p: 17, c: '#94A3B8' },
+        { w: '"soft"', p: 9, c: '#CBD5E1' }
+      ]
+    },
+    {
+      added: ['orange', 'and', 'gold', '.'],
+      label: "Complete! Generated sequentially token by token.",
+      bars: [
+        { w: '"[END]" ✓', p: 84, c: 'linear-gradient(90deg,#10B981,#20C5E8)', top: true },
+        { w: '"above"', p: 9, c: '#8067FF' },
+        { w: '"over"', p: 5, c: '#94A3B8' },
+        { w: '"slowly"', p: 2, c: '#CBD5E1' }
+      ]
+    }
+  ];
+  let predStepIdx = 0;
+
+  function renderPredictionStep() {
+    const st = predSteps[predStepIdx];
+    const sent = document.getElementById('pred-sentence');
+    const base = `
+      <span style="padding:8px 14px; border-radius:12px; background:#fff; border:1px solid #CBD5E1;">The</span>
+      <span style="padding:8px 14px; border-radius:12px; background:#DBEAFE; border:1.5px solid #1769FF; color:#1E40AF;">sky</span>
+      <span style="padding:8px 14px; border-radius:12px; background:#fff; border:1px solid #CBD5E1;">at</span>
+      <span style="padding:8px 14px; border-radius:12px; background:#CFFAFE; border:1.5px solid #20C5E8; color:#0E7490;">sunset</span>
+      <span style="padding:8px 14px; border-radius:12px; background:#fff; border:1px solid #CBD5E1;">turns</span>
+    `;
+    const appendedHtml = st.added.map(tok =>
+      `<span style="padding:8px 14px; border-radius:12px; background:#ECFDF5; border:1.5px solid #10B981; color:#065F46;">${tok}</span>`
+    ).join('');
+    const blankHtml = predStepIdx < predSteps.length - 1
+      ? `<span style="padding:8px 20px; border-radius:12px; background:linear-gradient(135deg,#1769FF,#8067FF); color:#fff;">?</span>`
+      : '';
+    sent.innerHTML = base + appendedHtml + blankHtml;
+
+    document.getElementById('pred-step-label').textContent = st.label;
+    document.getElementById('pred-bars').innerHTML = st.bars.map(b => `
+      <div>
+        <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:16px; font-weight:${b.top?700:600}; margin-bottom:6px; color:${b.top?'#1769FF':'var(--slate)'};">
+          <span>${b.w}</span><span>${b.p}%</span>
+        </div>
+        <div style="height:${b.top?22:18}px; border-radius:99px; background:#E2E8F0; overflow:hidden;">
+          <div style="width:${b.p}%; height:100%; border-radius:99px; background:${b.c}; transition:width 0.35s ease;"></div>
+        </div>
+      </div>
+    `).join('');
+  }
+  function stepTokenPrediction() {
+    predStepIdx = (predStepIdx + 1) % predSteps.length;
+    renderPredictionStep();
+  }
+  function resetTokenPrediction() {
+    predStepIdx = 0;
+    renderPredictionStep();
+  }
+
+  // Slide 17 Interactive Prompt Highlighter
+  function highlightPromptPart(idx) {
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById(`pp-${i}`);
+      if (!el) continue;
+      if (i === idx) {
+        el.style.outline = '3px solid #15233B';
+        el.style.boxShadow = '0 6px 16px rgba(21,35,59,0.14)';
+      } else {
+        el.style.outline = 'none';
+        el.style.boxShadow = 'none';
+      }
+    }
+  }
+
+  // Slide 20 Copy Starter Prompt & Timer
+  function copyStarterPrompt() {
+    const txt = `Role: Act as a digital marketing strategist.\nContext: I own a small [TYPE OF BUSINESS] in Tunisia with low social media visibility.\nTask: Create 1 practical growth strategy, 3 engaging social media posts, and 1 extra creative recommendation.\nConstraints: Budget under 150 TND, realistic for local Tunisian customers.\nOutput Format: Structured sections with ready-to-post captions.`;
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).catch(() => {});
+    showToast('Workshop Starter Prompt Copied!');
+  }
+
+  let timerSec = 15 * 60;
+  let timerRunning = false;
+  let timerInterval = null;
+  function renderTimer() {
+    const m = String(Math.floor(timerSec / 60)).padStart(2, '0');
+    const s = String(timerSec % 60).padStart(2, '0');
+    document.getElementById('timer-display').textContent = `${m}:${s}`;
+  }
+  function toggleTimerRunning() {
+    if (timerRunning) {
+      clearInterval(timerInterval);
+      timerRunning = false;
+      showToast('Timer Paused');
+    } else {
+      timerRunning = true;
+      showToast('Workshop Timer Started');
+      timerInterval = setInterval(() => {
+        if (timerSec > 0) { timerSec--; renderTimer(); }
+        else { clearInterval(timerInterval); timerRunning = false; showToast('Time is up!'); }
+      }, 1000);
+    }
+  }
+  function startChallengeTimer() {
+    clearInterval(timerInterval);
+    timerSec = 15 * 60;
+    renderTimer();
+    timerRunning = false;
+    toggleTimerRunning();
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault(); nextSlide();
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault(); prevSlide();
+    } else if (e.key === 'Home') {
+      goToSlide(1);
+    } else if (e.key === 'End') {
+      goToSlide(TOTAL_SLIDES);
+    } else if (e.key.toLowerCase() === 'n') {
+      toggleNotes();
+    } else if (e.key.toLowerCase() === 'g') {
+      toggleOverview();
+    } else if (e.key.toLowerCase() === 'f') {
+      toggleFullscreen();
+    } else if (e.key.toLowerCase() === 't') {
+      toggleTimerRunning();
+    } else if (e.key.toLowerCase() === 'h') {
+      document.body.classList.toggle('hide-hud');
+    } else if (e.key === 'Escape') {
+      document.getElementById('overview-modal').classList.remove('open');
+      document.getElementById('notes-drawer').classList.remove('open');
+    }
+  });
+
+  // Init
+  updateUI();
+</script>
+</body>
+</html>
